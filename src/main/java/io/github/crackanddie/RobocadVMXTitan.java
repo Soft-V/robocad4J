@@ -60,6 +60,8 @@ public class RobocadVMXTitan
     public RobocadVMXTitan() { this(true); }
     public RobocadVMXTitan(boolean isRealRobot)
     {
+        nu.pattern.OpenCV.loadShared();
+
         this.isRealRobot = isRealRobot;
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
