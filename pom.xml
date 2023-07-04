@@ -6,10 +6,21 @@
 
     <groupId>io.github.crackanddie</groupId>
     <artifactId>robocad4J</artifactId>
-    <version>1.1.0</version>
+    <version>1.0.1</version>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -104,12 +115,4 @@
         <developerConnection>scm:git:ssh://github.com:CrackAndDie/robocad4J.git</developerConnection>
         <url>https://github.com/CrackAndDie/robocad4J/tree/main</url>
     </scm>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.openpnp</groupId>
-            <artifactId>opencv</artifactId>
-            <version>4.5.1-0</version>
-        </dependency>
-    </dependencies>
 </project>

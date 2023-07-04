@@ -2,9 +2,11 @@ package io.github.crackanddie;
 
 import io.github.crackanddie.connection.ConnectionHelper;
 import io.github.crackanddie.connection.Holder;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -60,8 +62,6 @@ public class RobocadVMXTitan
     public RobocadVMXTitan() { this(true); }
     public RobocadVMXTitan(boolean isRealRobot)
     {
-        nu.pattern.OpenCV.loadShared();
-
         this.isRealRobot = isRealRobot;
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -112,75 +112,129 @@ public class RobocadVMXTitan
 
     public void setMotorSpeed0(float speed) {
         this.motorSpeed0 = speed;
+        if (!this.isRealRobot){
+            updateMotors();
+        }
     }
 
     public void setMotorSpeed1(float speed) {
         this.motorSpeed1 = speed;
+        if (!this.isRealRobot){
+            updateMotors();
+        }
     }
 
     public void setMotorSpeed2(float speed) {
         this.motorSpeed2 = speed;
+        if (!this.isRealRobot){
+            updateMotors();
+        }
     }
 
     public void setMotorSpeed3(float speed) {
         this.motorSpeed3 = speed;
+        if (!this.isRealRobot){
+            updateMotors();
+        }
     }
 
     public float getMotorEnc0() {
+        if (!this.isRealRobot){
+            updateEncs();
+        }
         return motorEnc0;
     }
 
     public float getMotorEnc1() {
+        if (!this.isRealRobot){
+            updateEncs();
+        }
         return motorEnc1;
     }
 
     public float getMotorEnc2() {
+        if (!this.isRealRobot){
+            updateEncs();
+        }
         return motorEnc2;
     }
 
     public float getMotorEnc3() {
+        if (!this.isRealRobot){
+            updateEncs();
+        }
         return motorEnc3;
     }
 
     public float getYaw() {
+        if (!this.isRealRobot){
+            updateSensors();
+        }
         return yaw;
     }
 
     public float getUltrasound1() {
+        if (!this.isRealRobot){
+            updateSensors();
+        }
         return ultrasound1;
     }
 
     public float getUltrasound2() {
+        if (!this.isRealRobot){
+            updateSensors();
+        }
         return ultrasound2;
     }
 
     public float getAnalog1() {
+        if (!this.isRealRobot){
+            updateSensors();
+        }
         return analog1;
     }
 
     public float getAnalog2() {
+        if (!this.isRealRobot){
+            updateSensors();
+        }
         return analog2;
     }
 
     public float getAnalog3() {
+        if (!this.isRealRobot){
+            updateSensors();
+        }
         return analog3;
     }
 
     public float getAnalog4() {
+        if (!this.isRealRobot){
+            updateSensors();
+        }
         return analog4;
     }
 
     public boolean[] getTitanLimits() {
+        if (!this.isRealRobot){
+            updateButtons();
+        }
         return new boolean[] { this.limitH0, this.limitL0, this.limitH1, this.limitL1,
                 this.limitH2, this.limitL2, this.limitH3, this.limitL3 };
     }
 
     public boolean[] getVMXFlex() {
+        if (!this.isRealRobot){
+            updateButtons();
+        }
         return new boolean[] { this.flex0, this.flex1, this.flex2, this.flex3,
                 this.flex4, this.flex5, this.flex6, this.flex7 };
     }
 
     public Mat getCameraImage() {
+        if (!this.isRealRobot){
+            updateCamera();
+        }
         return cameraImage;
     }
 
@@ -190,6 +244,7 @@ public class RobocadVMXTitan
     public void setAngleHCDIO(float value, int port) {
         if (!this.isRealRobot){
             this.hcdioValues[port - 1] = 0.000666f * value + 0.05f;
+            updateOMS();
         }
         else{
             // todo: for real robot
@@ -199,6 +254,7 @@ public class RobocadVMXTitan
     public void setPwmHCDIO(float value, int port) {
         if (!this.isRealRobot){
             this.hcdioValues[port - 1] = value;
+            updateOMS();
         }
         else{
             // todo: for real robot
@@ -208,6 +264,7 @@ public class RobocadVMXTitan
     public void setBoolHCDIO(boolean value, int port) {
         if (!this.isRealRobot){
             this.hcdioValues[port - 1] = value ? 0.2f : 0.0f;
+            updateOMS();
         }
         else{
             // todo: for real robot
@@ -280,7 +337,9 @@ public class RobocadVMXTitan
         var data = this.connHelper.getCamera();
         if (data.length == 921600)
         {
-
+            Mat newMat = new Mat(480, 640, CvType.CV_8UC3);
+            newMat.put(0, 0, data);
+            cameraImage = newMat;
         }
     }
 }
