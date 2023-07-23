@@ -113,7 +113,7 @@
 
     <scm>
         <connection>scm:git:git://github.com/CrackAndDie/robocad4J.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:CrackAndDie/robocad4J.git</developerConnection>
+        <developerConnection>scm:git:ssh://github.com:CrackAndDie/robocad4J.git</developerConnection>
         <url>https://github.com/CrackAndDie/robocad4J/tree/main</url>
       <tag>robocad4J-1.1.1</tag>
   </scm>
