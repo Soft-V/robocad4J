@@ -1,12 +1,10 @@
 import io.github.crackanddie.RobocadVMXTitan;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
 
 import java.time.LocalDateTime;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
         RobocadVMXTitan robot = new RobocadVMXTitan(false);
 
         int seconds = LocalDateTime.now().getSecond();

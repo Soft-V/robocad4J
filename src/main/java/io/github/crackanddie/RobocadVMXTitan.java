@@ -2,6 +2,7 @@ package io.github.crackanddie;
 
 import io.github.crackanddie.connection.ConnectionHelper;
 import io.github.crackanddie.connection.Holder;
+
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -52,12 +53,12 @@ public class RobocadVMXTitan
     private boolean flex6 = false;
     private boolean flex7 = false;
 
-    private Float[] hcdioValues = new Float[10];
+    private Float[] hcdioValues = new Float[] {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
 
     private ConnectionHelper connHelper = null;
 
-    private Mat cameraImage = null;
-    private VideoCapture cameraInstance = null;
+     private Mat cameraImage = null;
+     private VideoCapture cameraInstance = null;
 
     public RobocadVMXTitan() { this(true); }
     public RobocadVMXTitan(boolean isRealRobot)
@@ -84,7 +85,7 @@ public class RobocadVMXTitan
             // todo: for real robot
             try
             {
-                cameraInstance = new VideoCapture(0);
+                 cameraInstance = new VideoCapture(0);
             }
             catch (Exception e)
             {
