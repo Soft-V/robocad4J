@@ -1,4 +1,4 @@
-package io.github.crackanddie.connection;
+package io.github.crackanddie.common;
 
 import java.util.ArrayList;
 import java.util.List;

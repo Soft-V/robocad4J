@@ -1,15 +1,14 @@
 package io.github.crackanddie;
 
-import io.github.crackanddie.connection.ConnectionHelper;
-import io.github.crackanddie.connection.Holder;
+import io.github.crackanddie.robocadSim.ConnectionHelperVMXTitan;
+import io.github.crackanddie.robocadSim.Holder;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class RobocadVMXTitan
 {
@@ -53,9 +52,9 @@ public class RobocadVMXTitan
     private boolean flex6 = false;
     private boolean flex7 = false;
 
-    private Float[] hcdioValues = new Float[] {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
+    private final Float[] hcdioValues = new Float[] {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
 
-    private ConnectionHelper connHelper = null;
+    private ConnectionHelperVMXTitan connHelper = null;
 
      private Mat cameraImage = null;
      private VideoCapture cameraInstance = null;
@@ -77,7 +76,7 @@ public class RobocadVMXTitan
 
         if (!this.isRealRobot)
         {
-            connHelper = new ConnectionHelper(Holder.CONN_ALL);
+            connHelper = new ConnectionHelperVMXTitan();
             connHelper.startChannels();
         }
         else
@@ -114,28 +113,28 @@ public class RobocadVMXTitan
     public void setMotorSpeed0(float speed) {
         this.motorSpeed0 = speed;
         if (!this.isRealRobot){
-            updateMotors();
+            updateSetData();
         }
     }
 
     public void setMotorSpeed1(float speed) {
         this.motorSpeed1 = speed;
         if (!this.isRealRobot){
-            updateMotors();
+            updateSetData();
         }
     }
 
     public void setMotorSpeed2(float speed) {
         this.motorSpeed2 = speed;
         if (!this.isRealRobot){
-            updateMotors();
+            updateSetData();
         }
     }
 
     public void setMotorSpeed3(float speed) {
         this.motorSpeed3 = speed;
         if (!this.isRealRobot){
-            updateMotors();
+            updateSetData();
         }
     }
 
@@ -236,6 +235,13 @@ public class RobocadVMXTitan
         if (!this.isRealRobot){
             updateCamera();
         }
+        else
+        {
+            Mat m = new Mat();
+            if (cameraInstance.read(m)){
+                cameraImage = m;
+            }
+        }
         return cameraImage;
     }
 
@@ -245,7 +251,7 @@ public class RobocadVMXTitan
     public void setAngleHCDIO(float value, int port) {
         if (!this.isRealRobot){
             this.hcdioValues[port - 1] = 0.000666f * value + 0.05f;
-            updateOMS();
+            updateSetData();
         }
         else{
             // todo: for real robot
@@ -255,7 +261,7 @@ public class RobocadVMXTitan
     public void setPwmHCDIO(float value, int port) {
         if (!this.isRealRobot){
             this.hcdioValues[port - 1] = value;
-            updateOMS();
+            updateSetData();
         }
         else{
             // todo: for real robot
@@ -265,32 +271,22 @@ public class RobocadVMXTitan
     public void setBoolHCDIO(boolean value, int port) {
         if (!this.isRealRobot){
             this.hcdioValues[port - 1] = value ? 0.2f : 0.0f;
-            updateOMS();
+            updateSetData();
         }
         else{
             // todo: for real robot
         }
     }
 
-    private void updateOther(){
-        this.connHelper.setOther(Arrays.asList(0f, 0f, 0f));
-    }
-
-    private void updateMotors(){
-        this.connHelper.setMotors(Arrays.asList(this.motorSpeed0, this.motorSpeed1, this.motorSpeed2, this.motorSpeed3));
-    }
-
-    private void updateOMS(){
-        this.connHelper.setOMS(Arrays.asList(hcdioValues));
-    }
-
-    private void updateResets(){
-        this.connHelper.setResets(Arrays.asList(false, false, false));
+    private void updateSetData(){
+        var lst = Arrays.asList(this.motorSpeed0, this.motorSpeed1, this.motorSpeed2, this.motorSpeed3);
+        lst.addAll(List.of(hcdioValues));
+        this.connHelper.setData(lst);
     }
 
     private void updateEncs(){
-        var values = this.connHelper.getEncs();
-        if (values.size() == 4){
+        var values = this.connHelper.getData();
+        if (values.size() == ConnectionHelperVMXTitan.MAX_DATA_RECEIVE){
             this.motorEnc0 = values.get(0);
             this.motorEnc1 = values.get(1);
             this.motorEnc2 = values.get(2);
@@ -299,38 +295,38 @@ public class RobocadVMXTitan
     }
 
     private void updateSensors(){
-        var values = this.connHelper.getSens();
-        if (values.size() == 7){
-            this.ultrasound1 = values.get(0);
-            this.ultrasound2 = values.get(1);
-            this.analog1 = values.get(2);
-            this.analog2 = values.get(3);
-            this.analog3 = values.get(4);
-            this.analog4 = values.get(5);
-            this.yaw = values.get(6);
+        var values = this.connHelper.getData();
+        if (values.size() == ConnectionHelperVMXTitan.MAX_DATA_RECEIVE){
+            this.ultrasound1 = values.get(4);
+            this.ultrasound2 = values.get(5);
+            this.analog1 = values.get(6);
+            this.analog2 = values.get(7);
+            this.analog3 = values.get(8);
+            this.analog4 = values.get(9);
+            this.yaw = values.get(10);
         }
     }
 
     private void updateButtons(){
-        var values = this.connHelper.getButtons();
-        if (values.size() == 16){
-            this.limitH0 = values.get(0);
-            this.limitL0 = values.get(1);
-            this.limitH1 = values.get(2);
-            this.limitL1 = values.get(3);
-            this.limitH2 = values.get(4);
-            this.limitL2 = values.get(5);
-            this.limitH3 = values.get(6);
-            this.limitL3 = values.get(7);
+        var values = this.connHelper.getData();
+        if (values.size() == ConnectionHelperVMXTitan.MAX_DATA_RECEIVE){
+            this.limitH0 = values.get(11) == 1;
+            this.limitL0 = values.get(12) == 1;
+            this.limitH1 = values.get(13) == 1;
+            this.limitL1 = values.get(14) == 1;
+            this.limitH2 = values.get(15) == 1;
+            this.limitL2 = values.get(16) == 1;
+            this.limitH3 = values.get(17) == 1;
+            this.limitL3 = values.get(18) == 1;
 
-            this.flex0 = values.get(8);
-            this.flex1 = values.get(9);
-            this.flex2 = values.get(10);
-            this.flex3 = values.get(11);
-            this.flex4 = values.get(12);
-            this.flex5 = values.get(13);
-            this.flex6 = values.get(14);
-            this.flex7 = values.get(15);
+            this.flex0 = values.get(19) == 1;
+            this.flex1 = values.get(20) == 1;
+            this.flex2 = values.get(21) == 1;
+            this.flex3 = values.get(22) == 1;
+            this.flex4 = values.get(23) == 1;
+            this.flex5 = values.get(24) == 1;
+            this.flex6 = values.get(25) == 1;
+            this.flex7 = values.get(26) == 1;
         }
     }
 

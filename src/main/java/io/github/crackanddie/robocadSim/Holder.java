@@ -1,4 +1,4 @@
-package io.github.crackanddie.connection;
+package io.github.crackanddie.robocadSim;
 
 public class Holder
 {
@@ -8,15 +8,6 @@ public class Holder
     public static short LOG_NOTHING = 3;
 
     public static short LOG_LEVEL = LOG_EXC_WARN;
-
-    public static final int CONN_OTHER = 0x0001;
-    public static final int CONN_MOTORS_AND_ENCS = 0x0002;
-    public static final int CONN_OMS = 0x0004;
-    public static final int CONN_RESETS = 0x0008;
-    public static final int CONN_SENS = 0x0010;
-    public static final int CONN_BUTTONS = 0x0020;
-    public static final int CONN_CAMERA = 0x0040;
-    public static final int CONN_ALL = 0x00FF;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";

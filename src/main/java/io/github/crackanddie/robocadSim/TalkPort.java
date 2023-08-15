@@ -1,41 +1,34 @@
-package io.github.crackanddie.connection;
+package io.github.crackanddie.robocadSim;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
-public class ListenPort
+public class TalkPort
 {
     private final int port;
-    private final boolean isCamera;
 
     private boolean stopThread = false;
     public String outString = "";
-    public byte[] outBytes = new byte[0];
 
     private Socket sct;
     private Thread thread;
 
-    public ListenPort(int port)
+    public TalkPort(int port)
     {
         this.port = port;
-        this.isCamera = false;
     }
 
-    public ListenPort(int port, boolean isCamera)
+    public void startTalking()
     {
-        this.port = port;
-        this.isCamera = isCamera;
-    }
-
-    public void startListening()
-    {
-        this.thread = new Thread(this::listening);
+        this.thread = new Thread(this::talking);
         this.thread.start();
     }
 
-    private void listening()
+    private void talking()
     {
         try
         {
@@ -69,34 +62,10 @@ public class ListenPort
 
             while (!this.stopThread)
             {
-                if (this.isCamera)
-                {
-                    out.write("Wait for size".getBytes(StandardCharsets.UTF_16LE));
-                    byte[] imgSize = new byte[4];
-                    in.readFully(imgSize, 0, 4);
+                out.write((this.outString + "$").getBytes(StandardCharsets.UTF_16LE));
+                byte[] message = new byte[4];
+                in.readFully(message, 0, message.length);
 
-                    int bufferSize = (imgSize[3] & 0xff) << 24 | (imgSize[2] & 0xff) << 16 |
-                            (imgSize[1] & 0xff) << 8 | (imgSize[0] & 0xff);
-                    out.write("Wait for image".getBytes(StandardCharsets.UTF_16LE));
-                    byte[] imageBytes = new byte[bufferSize];
-                    in.readFully(imageBytes, 0, bufferSize);
-                    this.outBytes = imageBytes;
-                }
-                else
-                {
-                    out.write("Wait for data".getBytes(StandardCharsets.UTF_16LE));
-                    byte[] dataSize = new byte[4];
-                    in.readFully(dataSize, 0, 4);
-
-                    int length = (dataSize[3] & 0xff) << 24 | (dataSize[2] & 0xff) << 16 |
-                            (dataSize[1] & 0xff) << 8 | (dataSize[0] & 0xff);
-                    if(length > 0)
-                    {
-                        byte[] message = new byte[length];
-                        in.readFully(message, 0, length);
-                        this.outString = new String(message, StandardCharsets.UTF_16LE);
-                    }
-                }
                 Thread.sleep(4);
             }
 
@@ -117,11 +86,10 @@ public class ListenPort
 
     private void resetOut()
     {
-        this.outBytes = new byte[0];
         this.outString = "";
     }
 
-    public void stopListening()
+    public void stopTalking()
     {
         this.stopThread = true;
         this.resetOut();

@@ -4,7 +4,7 @@
 
     <groupId>io.github.crackanddie</groupId>
     <artifactId>robocad4J</artifactId>
-    <version>1.1.1</version> 
+    <version>1.1.1-SNAPSHOT</version> 
 
     <build>
         <plugins>
@@ -90,9 +90,9 @@
     <developers>
         <developer>
             <name>Airat Abdrakov</name>
-            <email>softvery@yandex.ru</email>
-            <organization>Soft V.</organization>
-            <organizationUrl>https://github.com/Soft-V</organizationUrl>
+            <email>abdrakovairat@gmail.com</email>
+            <organization>Abdrakov corp.</organization>
+            <organizationUrl>https://github.com/CrackAndDie</organizationUrl>
         </developer>
     </developers>
 
@@ -116,23 +116,13 @@
         <developerConnection>scm:git:ssh://github.com/CrackAndDie/robocad4J.git</developerConnection>
         <url>https://github.com/CrackAndDie/robocad4J/tree/main</url>
       <tag>robocad4J-1.1.1</tag>
-    </scm>
+  </scm>
 
     <dependencies>
         <dependency>
             <groupId>org.openpnp</groupId>
             <artifactId>opencv</artifactId>
             <version>4.5.1-0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.13.0</version>
         </dependency>
     </dependencies>
 </project>
