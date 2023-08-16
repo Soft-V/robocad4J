@@ -1,6 +1,9 @@
 package io.github.crackanddie.shufflecad;
 
+import io.github.crackanddie.common.LoggerInside;
+
 public class InfoHolder {
+    public static LoggerInside logger = null;
     public static boolean onRealRobot = true;
 
     public static String power = "0";

@@ -5,18 +5,20 @@ import io.github.crackanddie.jni.JavaWrapper;
 import io.github.crackanddie.jni.LibHolder;
 import io.github.crackanddie.shufflecad.InfoHolder;
 
+import java.util.Arrays;
+
 public class SPI {
-    private int toggler = 0;
+    private static int toggler = 0;
 
-    public boolean stopThread = false;
+    public static boolean stopThread = false;
 
-    public void startSPI(){
-        Thread th = new Thread(this::spiLoop);
+    public static void startSPI(){
+        Thread th = new Thread(SPI::spiLoop);
         th.setDaemon(true);
         th.start();
     }
 
-    private void spiLoop(){
+    private static void spiLoop(){
         try{
             LibHolder.getInstance().startSPI();
             long stTime = System.currentTimeMillis();
@@ -47,11 +49,12 @@ public class SPI {
         }
         catch (Exception e){
             LibHolder.getInstance().stopSPI();
-            // todo: log the exception
+            InfoHolder.logger.writeMainLog(e.getMessage());
+            InfoHolder.logger.writeMainLog(Arrays.toString(e.getStackTrace()));
         }
     }
 
-    private void setUpRxData(byte[] data){
+    private static void setUpRxData(byte[] data){
         if ((data[0] & 0xff) == 1){
             int yawU = (data[2] & 0xff) << 8 | (data[1] & 0xff);
             int us1U = (data[4] & 0xff) << 8 | (data[3] & 0xff);
@@ -84,7 +87,7 @@ public class SPI {
         }
     }
 
-    private byte[] setUpTxData(){
+    private static byte[] setUpTxData(){
         byte[] data = new byte[10];
         if (toggler == 0){
             data[0] = (byte)0x01;
@@ -93,7 +96,7 @@ public class SPI {
         return data;
     }
 
-    private void calcYawUnlim(float newYaw, float oldYaw){
+    private static void calcYawUnlim(float newYaw, float oldYaw){
         float delta = newYaw - oldYaw;
         if (delta < -180){
             delta = 180 - oldYaw;
