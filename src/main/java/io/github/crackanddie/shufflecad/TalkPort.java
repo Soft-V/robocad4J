@@ -88,14 +88,17 @@ public class TalkPort {
                 eventCall();
 
                 if (this.isCamera){
+                    // System.out.println(this.outString);
                     byte[] data = this.outString.getBytes(StandardCharsets.UTF_8);
                     ReadWriteSocketHelper.write(out, data);
                     // no use
                     ReadWriteSocketHelper.read(in);
                     ReadWriteSocketHelper.write(out, this.outBytes);
+                    // System.out.println(this.outBytes.length);
                     this.strFromClient = new String(ReadWriteSocketHelper.read(in), StandardCharsets.UTF_8);
                 }
                 else{
+                    // System.out.println(this.outString);
                     byte[] data = this.outString.getBytes(StandardCharsets.UTF_8);
                     ReadWriteSocketHelper.write(out, data);
                     // no use
@@ -112,9 +115,9 @@ public class TalkPort {
 
             this.sct.close();
         }
-        catch (IOException | InterruptedException e)
+        catch (IOException | InterruptedException | NullPointerException e)
         {
-            // there could be a error
+            System.out.println(Holder.ANSI_CYAN + "Exception " + e + this.port + Holder.ANSI_RESET);
         }
     }
 
@@ -134,34 +137,41 @@ public class TalkPort {
             {
                 this.sct.close();
             }
-            catch (IOException e)
+            catch (IOException | NullPointerException e)
             {
                 // there could be a error
             }
 
             if (this.thread != null)
             {
-                int stTime = LocalDateTime.now().toLocalTime().toSecondOfDay();
-                while (this.thread.isAlive())
-                {
-                    if (LocalDateTime.now().toLocalTime().toSecondOfDay() - stTime > 1)
-                    {
-                        if (Holder.LOG_LEVEL < Holder.LOG_EXC_WARN)
-                        {
-                            System.out.println(Holder.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
-                                    this.port + Holder.ANSI_RESET);
-                        }
-                        try
-                        {
-                            this.sct.close();
-                        }
-                        catch (IOException e)
-                        {
-                            // there could be a error
-                        }
-
-                    }
+                try {
+                    this.thread.interrupt();
                 }
+                catch (Exception e){
+
+                }
+//                int stTime = LocalDateTime.now().toLocalTime().toSecondOfDay();
+//                while (this.thread.isAlive())
+//                {
+//                    if (LocalDateTime.now().toLocalTime().toSecondOfDay() - stTime > 1)
+//                    {
+//                        if (Holder.LOG_LEVEL < Holder.LOG_EXC_WARN)
+//                        {
+//                            System.out.println(Holder.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
+//                                    this.port + Holder.ANSI_RESET);
+//                        }
+//                        try
+//                        {
+//                            this.sct.close();
+//                            this.sct = null;
+//                        }
+//                        catch (IOException | NullPointerException e)
+//                        {
+//                            // there could be a error
+//                        }
+//
+//                    }
+//                }
             }
         }
     }

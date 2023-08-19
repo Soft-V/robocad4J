@@ -11,9 +11,10 @@ public class SPI {
     private static int toggler = 0;
 
     public static boolean stopThread = false;
+    public static Thread th = null;
 
     public static void startSPI(){
-        Thread th = new Thread(SPI::spiLoop);
+        th = new Thread(SPI::spiLoop);
         th.setDaemon(true);
         th.start();
     }

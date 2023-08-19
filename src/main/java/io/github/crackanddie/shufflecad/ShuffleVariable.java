@@ -2,7 +2,7 @@ package io.github.crackanddie.shufflecad;
 
 import java.util.Objects;
 
-public class ShuffleVariable {
+public class ShuffleVariable implements IVariable {
     public static final String FLOAT_TYPE = "float";
     public static final String STRING_TYPE = "string";
     public static final String BIG_STRING_TYPE = "bigstring";

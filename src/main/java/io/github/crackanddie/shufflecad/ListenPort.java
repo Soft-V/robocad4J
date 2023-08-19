@@ -103,7 +103,7 @@ public class ListenPort
 
             this.sct.close();
         }
-        catch (IOException | InterruptedException e)
+        catch (IOException | InterruptedException | NullPointerException e)
         {
             // there could be an error
         }
@@ -125,34 +125,41 @@ public class ListenPort
             {
                 this.sct.close();
             }
-            catch (IOException e)
+            catch (IOException | NullPointerException e)
             {
                 // there could be a error
             }
 
             if (this.thread != null)
             {
-                int stTime = LocalDateTime.now().toLocalTime().toSecondOfDay();
-                while (this.thread.isAlive())
-                {
-                    if (LocalDateTime.now().toLocalTime().toSecondOfDay() - stTime > 1)
-                    {
-                        if (Holder.LOG_LEVEL < Holder.LOG_EXC_WARN)
-                        {
-                            System.out.println(Holder.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
-                                    this.port + Holder.ANSI_RESET);
-                        }
-                        try
-                        {
-                            this.sct.close();
-                        }
-                        catch (IOException e)
-                        {
-                            // there could be a error
-                        }
-
-                    }
+                try {
+                    this.thread.interrupt();
                 }
+                catch (Exception e){
+
+                }
+//                int stTime = LocalDateTime.now().toLocalTime().toSecondOfDay();
+//                while (this.thread.isAlive())
+//                {
+//                    if (LocalDateTime.now().toLocalTime().toSecondOfDay() - stTime > 1)
+//                    {
+//                        if (Holder.LOG_LEVEL < Holder.LOG_EXC_WARN)
+//                        {
+//                            System.out.println(Holder.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
+//                                    this.port + Holder.ANSI_RESET);
+//                        }
+//                        try
+//                        {
+//                            this.sct.close();
+//                            this.sct = null;
+//                        }
+//                        catch (IOException | NullPointerException e)
+//                        {
+//                            // there could be a error
+//                        }
+//
+//                    }
+//                }
             }
         }
     }

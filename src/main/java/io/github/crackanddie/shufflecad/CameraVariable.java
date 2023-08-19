@@ -3,7 +3,7 @@ package io.github.crackanddie.shufflecad;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 
-public class CameraVariable {
+public class CameraVariable implements IVariable {
     public String name;
     public Size shape;
     private Mat value;

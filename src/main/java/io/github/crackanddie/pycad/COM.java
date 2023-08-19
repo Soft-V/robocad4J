@@ -8,9 +8,10 @@ import java.util.Arrays;
 
 public class COM {
     public static boolean stopThread = false;
+    public static Thread th = null;
 
     public static void startCOM() {
-        Thread th = new Thread(COM::comLoop);
+        th = new Thread(COM::comLoop);
         th.setDaemon(true);
         th.start();
     }

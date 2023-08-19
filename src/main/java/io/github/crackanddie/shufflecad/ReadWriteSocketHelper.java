@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public class ReadWriteSocketHelper {
     public static void write(DataOutputStream stream, byte[] data) throws IOException {
-        byte[] lengthTrans = { (byte)((data.length << 24) & 0xff), (byte)((data.length << 16) & 0xff),
-                (byte)((data.length << 8) & 0xff), (byte)(data.length & 0xff) };
+        byte[] lengthTrans = { (byte)((data.length) & 0xff), (byte)((data.length >> 8) & 0xff),
+                (byte)((data.length >> 16) & 0xff), (byte)((data.length >> 24) & 0xff) };
         stream.write(lengthTrans);
         stream.flush();
         stream.write(data);
