@@ -4,7 +4,7 @@
 
     <groupId>io.github.crackanddie</groupId>
     <artifactId>robocad4J</artifactId>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.1.2</version>
 
     <build>
         <plugins>
@@ -72,6 +72,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
