@@ -4,7 +4,7 @@
 
     <groupId>io.github.crackanddie</groupId>
     <artifactId>robocad4J</artifactId>
-    <version>1.1.8-SNAPSHOT</version>
+    <version>1.1.5-SNAPSHOT</version>
 
     <build>
         <plugins>
@@ -17,6 +17,7 @@
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
                     <goals>deploy</goals>
+                    <goals>deploy nexus-staging:release</goals>
                 </configuration>
             </plugin>
             <plugin>
@@ -126,6 +127,16 @@
             <groupId>org.openpnp</groupId>
             <artifactId>opencv</artifactId>
             <version>4.5.1-0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.20.0</version>
         </dependency>
     </dependencies>
 </project>
