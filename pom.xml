@@ -4,7 +4,7 @@
 
     <groupId>io.github.crackanddie</groupId>
     <artifactId>robocad4J</artifactId>
-    <version>1.1.5-SNAPSHOT</version>
+    <version>1.1.5</version>
 
     <build>
         <plugins>
@@ -119,7 +119,7 @@
         <connection>scm:git:git://github.com/CrackAndDie/robocad4J.git</connection>
         <developerConnection>scm:git:ssh://github.com/CrackAndDie/robocad4J.git</developerConnection>
         <url>https://github.com/CrackAndDie/robocad4J/tree/main</url>
-        <tag>robocad4J-1.1.2</tag>
+        <tag>robocad4J-1.1.5</tag>
     </scm>
 
     <dependencies>
