@@ -32,6 +32,10 @@ public class SPI {
 
                 byte[] rxList = LibHolder.getInstance().readWriteSPI(txList, txList.length);
 
+//                System.out.println("SPI");
+//                System.out.println(Arrays.toString(txList));
+//                System.out.println(Arrays.toString(rxList));
+
                 long rxTime = System.currentTimeMillis();
                 setUpRxData(rxList);
                 InfoHolder.rxSpiTimeDev = String.valueOf(System.currentTimeMillis() - rxTime);

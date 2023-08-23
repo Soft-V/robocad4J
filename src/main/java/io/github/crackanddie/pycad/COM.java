@@ -29,6 +29,10 @@ public class COM {
 
                 byte[] rxList = LibHolder.getInstance().readWriteUSB(txList, txList.length);
 
+//                System.out.println("COM");
+//                System.out.println(Arrays.toString(txList));
+//                System.out.println(Arrays.toString(rxList));
+
                 long rxTime = System.currentTimeMillis();
                 setUpRxData(rxList);
                 InfoHolder.rxComTimeDev = String.valueOf(System.currentTimeMillis() - rxTime);
@@ -92,14 +96,14 @@ public class COM {
         data[8] = motorSpeeds[2];
         data[9] = motorSpeeds[3];
 
-        data[10] = Byte.parseByte("1" +
+        data[10] = (byte)Integer.parseInt("1" +
                 (TitanStatic.speedMotor0 >= 0 ? "1" : "0") +
                 (TitanStatic.speedMotor1 >= 0 ? "1" : "0") +
                 (TitanStatic.speedMotor2 >= 0 ? "1" : "0") +
                 (TitanStatic.speedMotor3 >= 0 ? "1" : "0") +
                 "001", 2);
 
-        data[11] = Byte.parseByte("1" + "0100001", 2);
+        data[11] = (byte)Integer.parseInt("1" + "0100001", 2);
         data[20] = (byte)0xde;
 
         return data;

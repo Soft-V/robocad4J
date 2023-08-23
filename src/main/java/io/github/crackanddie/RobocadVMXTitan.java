@@ -11,7 +11,7 @@ import io.github.crackanddie.shufflecad.InfoHolder;
 import io.github.crackanddie.shufflecad.Shufflecad;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.videoio.VideoCapture;
+import org.opencv.highgui.VideoCapture;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -365,13 +365,13 @@ public class RobocadVMXTitan
     }
 
     private void updateSetData(){
-        var lst = new ArrayList<Float>(Arrays.asList(this.motorSpeed0, this.motorSpeed1, this.motorSpeed2, this.motorSpeed3));
-        lst.addAll(List.of(hcdioValues));
+        List<Float> lst = new ArrayList<Float>(Arrays.asList(this.motorSpeed0, this.motorSpeed1, this.motorSpeed2, this.motorSpeed3));
+        lst.addAll(new ArrayList<>(Arrays.asList(hcdioValues)));
         this.connHelper.setData(lst);
     }
 
     private void updateEncs(){
-        var values = this.connHelper.getData();
+        List<Float> values = this.connHelper.getData();
         if (values.size() == ConnectionHelperVMXTitan.MAX_DATA_RECEIVE){
             this.motorEnc0 = values.get(0);
             this.motorEnc1 = values.get(1);
@@ -381,7 +381,7 @@ public class RobocadVMXTitan
     }
 
     private void updateSensors(){
-        var values = this.connHelper.getData();
+        List<Float> values = this.connHelper.getData();
         if (values.size() == ConnectionHelperVMXTitan.MAX_DATA_RECEIVE){
             this.ultrasound1 = values.get(4);
             this.ultrasound2 = values.get(5);
@@ -394,7 +394,7 @@ public class RobocadVMXTitan
     }
 
     private void updateButtons(){
-        var values = this.connHelper.getData();
+        List<Float> values = this.connHelper.getData();
         if (values.size() == ConnectionHelperVMXTitan.MAX_DATA_RECEIVE){
             this.limitH0 = values.get(11) == 1;
             this.limitL0 = values.get(12) == 1;
@@ -417,7 +417,7 @@ public class RobocadVMXTitan
     }
 
     private void updateCamera(){
-        var data = this.connHelper.getCamera();
+        byte[] data = this.connHelper.getCamera();
         if (data.length == 921600)
         {
             Mat newMat = new Mat(480, 640, CvType.CV_8UC3);

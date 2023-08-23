@@ -1,7 +1,7 @@
 package io.github.crackanddie.shufflecad;
 
+import org.opencv.highgui.Highgui;
 import org.opencv.core.*;
-import org.opencv.imgcodecs.Imgcodecs;
 
 public class CameraVariable implements IVariable {
     public String name;
@@ -15,8 +15,8 @@ public class CameraVariable implements IVariable {
     }
 
     public byte[] getValue(){
-        var bytes = new MatOfByte();
-        Imgcodecs.imencode(".jpg", this.value, bytes);
+        MatOfByte bytes = new MatOfByte();
+        Highgui.imencode(".jpg", this.value, bytes);
         return bytes.toArray();
     }
 

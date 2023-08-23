@@ -65,7 +65,7 @@ public class TalkPort {
 
         try
         {
-            var clientSocket = this.sct.accept();
+            Socket clientSocket = this.sct.accept();
             DataInputStream in = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
 
