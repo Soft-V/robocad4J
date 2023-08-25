@@ -67,7 +67,7 @@ public class SPI {
             int us2U = (data[6] & 0xff) << 8 | (data[5] & 0xff);
             VMXStatic.ultrasound2 = us2U / 100.0f;
 
-            float power = ((data[6] & 0xff) << 8 | (data[5] & 0xff)) / 100.0f;
+            float power = ((data[8] & 0xff) << 8 | (data[7] & 0xff)) / 100.0f;
             InfoHolder.power = String.valueOf(power);
 
             float yaw = (yawU / 100.0f) * (Funcad.accessBit(data[9], 1) ? 1 : -1);
