@@ -1,9 +1,8 @@
-package io.github.crackanddie.shufflecad;
+package io.github.softv.shufflecad;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ConnectionHelper {
     private static TalkPort outVariablesChannel;

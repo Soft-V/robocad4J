@@ -1,9 +1,8 @@
-import io.github.crackanddie.RobocadVMXTitan;
-import io.github.crackanddie.robocadSim.Holder;
-import io.github.crackanddie.shufflecad.CameraVariable;
-import io.github.crackanddie.shufflecad.InfoHolder;
-import io.github.crackanddie.shufflecad.ShuffleVariable;
-import io.github.crackanddie.shufflecad.Shufflecad;
+import io.github.softv.RobocadVMXTitan;
+import io.github.softv.robocadSim.Holder;
+import io.github.softv.shufflecad.CameraVariable;
+import io.github.softv.shufflecad.InfoHolder;
+import io.github.softv.shufflecad.Shufflecad;
 
 import java.io.IOException;
 import java.time.*;

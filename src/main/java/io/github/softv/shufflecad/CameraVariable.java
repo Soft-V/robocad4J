@@ -1,4 +1,4 @@
-package io.github.crackanddie.shufflecad;
+package io.github.softv.shufflecad;
 
 import org.opencv.highgui.Highgui;
 import org.opencv.core.*;

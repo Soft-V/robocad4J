@@ -1,4 +1,6 @@
-package io.github.crackanddie.robocadSim;
+package io.github.softv.internal.studica;
+
+import io.github.softv.Common;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -55,9 +57,9 @@ public class TalkPort
                 // there could be a error
             }
 
-            if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
+            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
             {
-                System.out.println(Holder.ANSI_CYAN + "Connected " + this.port + Holder.ANSI_RESET);
+                System.out.println(Common.ANSI_CYAN + "Connected " + this.port + Common.ANSI_RESET);
             }
 
             while (!this.stopThread)
@@ -69,9 +71,9 @@ public class TalkPort
                 Thread.sleep(4);
             }
 
-            if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
+            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
             {
-                System.out.println(Holder.ANSI_CYAN + "Disconnected " + this.port + Holder.ANSI_RESET);
+                System.out.println(Common.ANSI_CYAN + "Disconnected " + this.port + Common.ANSI_RESET);
             }
 
             this.sct.shutdownInput();
@@ -112,10 +114,10 @@ public class TalkPort
                 {
                     if (LocalDateTime.now().toLocalTime().toSecondOfDay() - stTime > 1)
                     {
-                        if (Holder.LOG_LEVEL < Holder.LOG_EXC_WARN)
+                        if (Common.LOG_LEVEL < Common.LOG_EXC_WARN)
                         {
-                            System.out.println(Holder.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
-                                    this.port + Holder.ANSI_RESET);
+                            System.out.println(Common.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
+                                    this.port + Common.ANSI_RESET);
                         }
                         try
                         {

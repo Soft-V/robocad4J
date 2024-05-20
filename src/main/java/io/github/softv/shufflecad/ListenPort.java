@@ -1,6 +1,6 @@
-package io.github.crackanddie.shufflecad;
+package io.github.softv.shufflecad;
 
-import io.github.crackanddie.robocadSim.Holder;
+import io.github.softv.robocadSim.Holder;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,15 +9,14 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 
-public class TalkPort {
+public class ListenPort
+{
     private final int port;
 
     private boolean stopThread = false;
     public String outString = "null";
     public byte[] outBytes = "null".getBytes(StandardCharsets.UTF_8);
-    public String strFromClient = "-1";
 
     private ServerSocket sct;
     private Thread thread;
@@ -26,20 +25,11 @@ public class TalkPort {
 
     private final int delay;
 
-    private final boolean isCamera;
-
-    public TalkPort(int port, ICallback callback, int delay, boolean isCamera)
+    public ListenPort(int port, ICallback callback, int delay)
     {
         this.port = port;
         this.callbackMethod = callback;
         this.delay = delay;
-        this.isCamera = isCamera;
-    }
-
-    public void startTalking()
-    {
-        this.thread = new Thread(this::talking);
-        this.thread.start();
     }
 
     private void eventCall(){
@@ -48,7 +38,13 @@ public class TalkPort {
         }
     }
 
-    private void talking()
+    public void startListening()
+    {
+        this.thread = new Thread(this::listening);
+        this.thread.start();
+    }
+
+    private void listening()
     {
         try
         {
@@ -85,27 +81,17 @@ public class TalkPort {
 
             while (!this.stopThread)
             {
-                eventCall();
+                byte[] data = "Waiting for data".getBytes(StandardCharsets.UTF_8);
+                ReadWriteSocketHelper.write(out, data);
 
-                if (this.isCamera){
-                    // System.out.println(this.outString);
-                    byte[] data = this.outString.getBytes(StandardCharsets.UTF_8);
-                    ReadWriteSocketHelper.write(out, data);
-                    // no use
-                    ReadWriteSocketHelper.read(in);
-                    ReadWriteSocketHelper.write(out, this.outBytes);
-                    // System.out.println(this.outBytes.length);
-                    this.strFromClient = new String(ReadWriteSocketHelper.read(in), StandardCharsets.UTF_8);
-                }
-                else{
-                    // System.out.println(this.outString);
-                    byte[] data = this.outString.getBytes(StandardCharsets.UTF_8);
-                    ReadWriteSocketHelper.write(out, data);
-                    // no use
-                    this.strFromClient = new String(ReadWriteSocketHelper.read(in), StandardCharsets.UTF_8);
-                }
+                byte[] message = ReadWriteSocketHelper.read(in);
+                if(message.length > 0)
+                {
+                    this.outString = new String(message, StandardCharsets.UTF_8);
 
-                Thread.sleep(this.delay);
+                    eventCall();
+                }
+                Thread.sleep(delay);
             }
 
             if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
@@ -117,7 +103,7 @@ public class TalkPort {
         }
         catch (IOException | InterruptedException | NullPointerException e)
         {
-            System.out.println(Holder.ANSI_CYAN + "Exception " + e + this.port + Holder.ANSI_RESET);
+            // there could be an error
         }
     }
 
@@ -127,7 +113,7 @@ public class TalkPort {
         this.outString = "null";
     }
 
-    public void stopTalking()
+    public void stopListening()
     {
         this.stopThread = true;
         this.resetOut();
