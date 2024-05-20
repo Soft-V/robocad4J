@@ -1,39 +1,25 @@
-package io.github.crackanddie.shufflecad;
-
-import io.github.crackanddie.robocadSim.Holder;
+package io.github.softv.internal.studica;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
-public class TalkPort {
+public class TalkPort
+{
     private final int port;
 
     private boolean stopThread = false;
-    public String outString = "null";
-    public byte[] outBytes = "null".getBytes(StandardCharsets.UTF_8);
-    public String strFromClient = "-1";
+    public String outString = "";
 
-    private ServerSocket sct;
+    private Socket sct;
     private Thread thread;
 
-    private final ICallback callbackMethod;
-
-    private final int delay;
-
-    private final boolean isCamera;
-
-    public TalkPort(int port, ICallback callback, int delay, boolean isCamera)
+    public TalkPort(int port)
     {
         this.port = port;
-        this.callbackMethod = callback;
-        this.delay = delay;
-        this.isCamera = isCamera;
     }
 
     public void startTalking()
@@ -42,19 +28,11 @@ public class TalkPort {
         this.thread.start();
     }
 
-    private void eventCall(){
-        if (callbackMethod != null){
-            callbackMethod.onCall();
-        }
-    }
-
     private void talking()
     {
         try
         {
-            this.sct = new ServerSocket();
-            this.sct.bind(new InetSocketAddress("0.0.0.0", this.port));
-            this.sct.setReuseAddress(true);
+            this.sct = new Socket("localhost", this.port);
         }
         catch (IOException e)
         {
@@ -65,9 +43,8 @@ public class TalkPort {
 
         try
         {
-            var clientSocket = this.sct.accept();
-            DataInputStream in = new DataInputStream(clientSocket.getInputStream());
-            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+            DataInputStream in = new DataInputStream(this.sct.getInputStream());
+            DataOutputStream out = new DataOutputStream(this.sct.getOutputStream());
 
             try
             {
@@ -85,24 +62,11 @@ public class TalkPort {
 
             while (!this.stopThread)
             {
-                eventCall();
+                out.write((this.outString + "$").getBytes(StandardCharsets.UTF_16LE));
+                byte[] message = new byte[4];
+                in.readFully(message, 0, message.length);
 
-                if (this.isCamera){
-                    byte[] data = this.outString.getBytes(StandardCharsets.UTF_8);
-                    ReadWriteSocketHelper.write(out, data);
-                    // no use
-                    ReadWriteSocketHelper.read(in);
-                    ReadWriteSocketHelper.write(out, this.outBytes);
-                    this.strFromClient = new String(ReadWriteSocketHelper.read(in), StandardCharsets.UTF_8);
-                }
-                else{
-                    byte[] data = this.outString.getBytes(StandardCharsets.UTF_8);
-                    ReadWriteSocketHelper.write(out, data);
-                    // no use
-                    this.strFromClient = new String(ReadWriteSocketHelper.read(in), StandardCharsets.UTF_8);
-                }
-
-                Thread.sleep(this.delay);
+                Thread.sleep(4);
             }
 
             if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
@@ -110,6 +74,8 @@ public class TalkPort {
                 System.out.println(Holder.ANSI_CYAN + "Disconnected " + this.port + Holder.ANSI_RESET);
             }
 
+            this.sct.shutdownInput();
+            this.sct.shutdownOutput();
             this.sct.close();
         }
         catch (IOException | InterruptedException e)
@@ -120,8 +86,7 @@ public class TalkPort {
 
     private void resetOut()
     {
-        this.outBytes = "null".getBytes(StandardCharsets.UTF_8);
-        this.outString = "null";
+        this.outString = "";
     }
 
     public void stopTalking()
@@ -132,7 +97,8 @@ public class TalkPort {
         {
             try
             {
-                this.sct.close();
+                this.sct.shutdownInput();
+                this.sct.shutdownOutput();
             }
             catch (IOException e)
             {

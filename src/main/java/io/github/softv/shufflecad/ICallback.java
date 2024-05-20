@@ -1,4 +1,4 @@
-package io.github.crackanddie.shufflecad;
+package io.github.softv.shufflecad;
 
 public interface ICallback {
     void onCall();

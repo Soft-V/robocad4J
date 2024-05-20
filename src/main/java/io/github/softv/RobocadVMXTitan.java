@@ -1,7 +1,7 @@
-package io.github.crackanddie;
+package io.github.softv;
 
-import io.github.crackanddie.robocadSim.ConnectionHelperVMXTitan;
-import io.github.crackanddie.robocadSim.Holder;
+import io.github.softv.internal.studica.ConnectionSim;
+import io.github.softv.robocadSim.Holder;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -54,7 +54,7 @@ public class RobocadVMXTitan
 
     private final Float[] hcdioValues = new Float[] {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
 
-    private ConnectionHelperVMXTitan connHelper = null;
+    private ConnectionSim connHelper = null;
 
      private Mat cameraImage = null;
      private VideoCapture cameraInstance = null;
@@ -76,7 +76,7 @@ public class RobocadVMXTitan
 
         if (!this.isRealRobot)
         {
-            connHelper = new ConnectionHelperVMXTitan();
+            connHelper = new ConnectionSim();
             connHelper.startChannels();
         }
         else
@@ -286,7 +286,7 @@ public class RobocadVMXTitan
 
     private void updateEncs(){
         var values = this.connHelper.getData();
-        if (values.size() == ConnectionHelperVMXTitan.MAX_DATA_RECEIVE){
+        if (values.size() == ConnectionSim.MAX_DATA_RECEIVE){
             this.motorEnc0 = values.get(0);
             this.motorEnc1 = values.get(1);
             this.motorEnc2 = values.get(2);
@@ -296,7 +296,7 @@ public class RobocadVMXTitan
 
     private void updateSensors(){
         var values = this.connHelper.getData();
-        if (values.size() == ConnectionHelperVMXTitan.MAX_DATA_RECEIVE){
+        if (values.size() == ConnectionSim.MAX_DATA_RECEIVE){
             this.ultrasound1 = values.get(4);
             this.ultrasound2 = values.get(5);
             this.analog1 = values.get(6);
@@ -309,7 +309,7 @@ public class RobocadVMXTitan
 
     private void updateButtons(){
         var values = this.connHelper.getData();
-        if (values.size() == ConnectionHelperVMXTitan.MAX_DATA_RECEIVE){
+        if (values.size() == ConnectionSim.MAX_DATA_RECEIVE){
             this.limitH0 = values.get(11) == 1;
             this.limitL0 = values.get(12) == 1;
             this.limitH1 = values.get(13) == 1;

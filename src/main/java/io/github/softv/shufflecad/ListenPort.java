@@ -1,38 +1,56 @@
-package io.github.crackanddie.robocadSim;
+package io.github.softv.shufflecad;
+
+import io.github.softv.robocadSim.Holder;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
-public class TalkPort
+public class ListenPort
 {
     private final int port;
 
     private boolean stopThread = false;
-    public String outString = "";
+    public String outString = "null";
+    public byte[] outBytes = "null".getBytes(StandardCharsets.UTF_8);
 
-    private Socket sct;
+    private ServerSocket sct;
     private Thread thread;
 
-    public TalkPort(int port)
+    private final ICallback callbackMethod;
+
+    private final int delay;
+
+    public ListenPort(int port, ICallback callback, int delay)
     {
         this.port = port;
+        this.callbackMethod = callback;
+        this.delay = delay;
     }
 
-    public void startTalking()
+    private void eventCall(){
+        if (callbackMethod != null){
+            callbackMethod.onCall();
+        }
+    }
+
+    public void startListening()
     {
-        this.thread = new Thread(this::talking);
+        this.thread = new Thread(this::listening);
         this.thread.start();
     }
 
-    private void talking()
+    private void listening()
     {
         try
         {
-            this.sct = new Socket("localhost", this.port);
+            this.sct = new ServerSocket();
+            this.sct.bind(new InetSocketAddress("0.0.0.0", this.port));
+            this.sct.setReuseAddress(true);
         }
         catch (IOException e)
         {
@@ -43,8 +61,9 @@ public class TalkPort
 
         try
         {
-            DataInputStream in = new DataInputStream(this.sct.getInputStream());
-            DataOutputStream out = new DataOutputStream(this.sct.getOutputStream());
+            var clientSocket = this.sct.accept();
+            DataInputStream in = new DataInputStream(clientSocket.getInputStream());
+            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
 
             try
             {
@@ -62,11 +81,17 @@ public class TalkPort
 
             while (!this.stopThread)
             {
-                out.write((this.outString + "$").getBytes(StandardCharsets.UTF_16LE));
-                byte[] message = new byte[4];
-                in.readFully(message, 0, message.length);
+                byte[] data = "Waiting for data".getBytes(StandardCharsets.UTF_8);
+                ReadWriteSocketHelper.write(out, data);
 
-                Thread.sleep(4);
+                byte[] message = ReadWriteSocketHelper.read(in);
+                if(message.length > 0)
+                {
+                    this.outString = new String(message, StandardCharsets.UTF_8);
+
+                    eventCall();
+                }
+                Thread.sleep(delay);
             }
 
             if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
@@ -74,22 +99,21 @@ public class TalkPort
                 System.out.println(Holder.ANSI_CYAN + "Disconnected " + this.port + Holder.ANSI_RESET);
             }
 
-            this.sct.shutdownInput();
-            this.sct.shutdownOutput();
             this.sct.close();
         }
         catch (IOException | InterruptedException e)
         {
-            // there could be a error
+            // there could be an error
         }
     }
 
     private void resetOut()
     {
-        this.outString = "";
+        this.outBytes = "null".getBytes(StandardCharsets.UTF_8);
+        this.outString = "null";
     }
 
-    public void stopTalking()
+    public void stopListening()
     {
         this.stopThread = true;
         this.resetOut();
@@ -97,8 +121,7 @@ public class TalkPort
         {
             try
             {
-                this.sct.shutdownInput();
-                this.sct.shutdownOutput();
+                this.sct.close();
             }
             catch (IOException e)
             {

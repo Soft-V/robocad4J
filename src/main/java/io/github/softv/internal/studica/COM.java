@@ -1,18 +1,20 @@
-package io.github.crackanddie.pycad;
+package io.github.softv.internal.studica;
 
-import io.github.crackanddie.common.Funcad;
-import io.github.crackanddie.jni.LibHolder;
-import io.github.crackanddie.shufflecad.InfoHolder;
+import io.github.softv.Common;
+import io.github.softv.internal.LowLevelFuncad;
+import io.github.softv.internal.studica.jni.LibHolder;
+import io.github.softv.internal.studica.shared.TitanStatic;
 
 import java.util.Arrays;
 
 public class COM {
     public static boolean stopThread = false;
+    public static Thread thread = null;
 
     public static void startCOM() {
-        Thread th = new Thread(COM::comLoop);
-        th.setDaemon(true);
-        th.start();
+        thread = new Thread(COM::comLoop);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     private static void comLoop() {
@@ -24,29 +26,29 @@ public class COM {
             while (!stopThread) {
                 long txTime = System.currentTimeMillis();
                 byte[] txList = setUpTxData();
-                InfoHolder.txComTimeDev = String.valueOf(System.currentTimeMillis() - txTime);
+                Common.txComTimeDev = System.currentTimeMillis() - txTime;
 
                 byte[] rxList = LibHolder.getInstance().readWriteUSB(txList, txList.length);
 
                 long rxTime = System.currentTimeMillis();
                 setUpRxData(rxList);
-                InfoHolder.rxComTimeDev = String.valueOf(System.currentTimeMillis() - rxTime);
+                Common.rxComTimeDev = System.currentTimeMillis() - rxTime;
 
                 commCounter++;
                 if (System.currentTimeMillis() - sendCountTime > 1000) {
                     sendCountTime = System.currentTimeMillis();
-                    InfoHolder.comCountDev = String.valueOf(commCounter);
+                    Common.comCountDev = commCounter;
                     commCounter = 0;
                 }
 
                 Thread.sleep(2);
-                InfoHolder.comTimeDev = String.format("%.2f", (System.currentTimeMillis() - stTime) / 1000.0f);
+                Common.comTimeDev = (System.currentTimeMillis() - stTime) / 1000.0f;
                 stTime = System.currentTimeMillis();
             }
         } catch (Exception e) {
             LibHolder.getInstance().stopUSB();
-            InfoHolder.logger.writeMainLog(e.getMessage());
-            InfoHolder.logger.writeMainLog(Arrays.toString(e.getStackTrace()));
+            Common.logger.writeMainLog(e.getMessage());
+            Common.logger.writeMainLog(Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -58,14 +60,14 @@ public class COM {
             int rawEnc3 = (data[8] & 0xff) << 8 | (data[7] & 0xff);
             setUpEncoders(rawEnc0, rawEnc1, rawEnc2, rawEnc3);
 
-            TitanStatic.limitL0 = Funcad.accessBit(data[9], 1);
-            TitanStatic.limitH0 = Funcad.accessBit(data[9], 2);
-            TitanStatic.limitL1 = Funcad.accessBit(data[9], 3);
-            TitanStatic.limitH1 = Funcad.accessBit(data[9], 4);
-            TitanStatic.limitL2 = Funcad.accessBit(data[9], 5);
-            TitanStatic.limitH2 = Funcad.accessBit(data[9], 6);
-            TitanStatic.limitL3 = Funcad.accessBit(data[10], 1);
-            TitanStatic.limitH3 = Funcad.accessBit(data[10], 2);
+            TitanStatic.limitL0 = LowLevelFuncad.accessBit(data[9], 1);
+            TitanStatic.limitH0 = LowLevelFuncad.accessBit(data[9], 2);
+            TitanStatic.limitL1 = LowLevelFuncad.accessBit(data[9], 3);
+            TitanStatic.limitH1 = LowLevelFuncad.accessBit(data[9], 4);
+            TitanStatic.limitL2 = LowLevelFuncad.accessBit(data[9], 5);
+            TitanStatic.limitH2 = LowLevelFuncad.accessBit(data[9], 6);
+            TitanStatic.limitL3 = LowLevelFuncad.accessBit(data[10], 1);
+            TitanStatic.limitH3 = LowLevelFuncad.accessBit(data[10], 2);
         }
     }
 
@@ -75,19 +77,19 @@ public class COM {
         data[0] = (byte)0x01;
         byte[] motorSpeeds;
 
-        motorSpeeds = Funcad.intTo4Bytes(Math.abs((int)(TitanStatic.speedMotor0 / 100.0 * 65535)));
+        motorSpeeds = LowLevelFuncad.intTo4Bytes(Math.abs((int)(TitanStatic.speedMotor0 / 100.0 * 65535)));
         data[2] = motorSpeeds[2];
         data[3] = motorSpeeds[3];
 
-        motorSpeeds = Funcad.intTo4Bytes(Math.abs((int)(TitanStatic.speedMotor1 / 100.0 * 65535)));
+        motorSpeeds = LowLevelFuncad.intTo4Bytes(Math.abs((int)(TitanStatic.speedMotor1 / 100.0 * 65535)));
         data[4] = motorSpeeds[2];
         data[5] = motorSpeeds[3];
 
-        motorSpeeds = Funcad.intTo4Bytes(Math.abs((int)(TitanStatic.speedMotor2 / 100.0 * 65535)));
+        motorSpeeds = LowLevelFuncad.intTo4Bytes(Math.abs((int)(TitanStatic.speedMotor2 / 100.0 * 65535)));
         data[6] = motorSpeeds[2];
         data[7] = motorSpeeds[3];
 
-        motorSpeeds = Funcad.intTo4Bytes(Math.abs((int)(TitanStatic.speedMotor3 / 100.0 * 65535)));
+        motorSpeeds = LowLevelFuncad.intTo4Bytes(Math.abs((int)(TitanStatic.speedMotor3 / 100.0 * 65535)));
         data[8] = motorSpeeds[2];
         data[9] = motorSpeeds[3];
 

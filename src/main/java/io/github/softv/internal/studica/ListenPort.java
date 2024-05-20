@@ -1,4 +1,4 @@
-package io.github.crackanddie.robocadSim;
+package io.github.softv.internal.studica;
 
 import java.io.*;
 import java.net.Socket;

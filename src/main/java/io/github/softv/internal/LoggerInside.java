@@ -1,6 +1,6 @@
-package io.github.crackanddie.common;
+package io.github.softv.internal;
 
-import io.github.crackanddie.shufflecad.InfoHolder;
+import io.github.softv.Common;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,12 +8,11 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.core.config.DefaultConfiguration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.filter.ThresholdFilter;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 public class LoggerInside {
-    private Logger logger;
+    private final Logger logger;
 
     public LoggerInside(){
         PatternLayout.Builder builder = PatternLayout.newBuilder();
@@ -23,7 +22,7 @@ public class LoggerInside {
         appBuilder.setLayout(builder.build());
         appBuilder.setName("fileAppender");
         appBuilder.withAppend(true);
-        if (InfoHolder.onRealRobot)
+        if (Common.onRealRobot)
             appBuilder.withFileName("/home/pi/robocad/logs/cad_main.log");
         else
             appBuilder.withFileName("./cad_main.log");

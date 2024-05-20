@@ -1,6 +1,6 @@
-package io.github.crackanddie.common;
+package io.github.softv.internal;
 
-public class Funcad {
+public class LowLevelFuncad {
     public static boolean accessBit(byte b, int pos){
         return ((b >> pos) & 1) != 0;
     }

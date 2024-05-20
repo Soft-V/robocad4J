@@ -1,4 +1,4 @@
-package io.github.crackanddie.common;
+package io.github.softv.internal;
 
 import java.util.ArrayList;
 import java.util.List;
