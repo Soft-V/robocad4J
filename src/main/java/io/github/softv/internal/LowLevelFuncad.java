@@ -15,6 +15,11 @@ public class LowLevelFuncad {
                 (byte)((val >> 8) & 0xff), (byte)(val & 0xff)};
     }
 
+    public static byte[] intTo4BytesLE(int val){
+        return new byte[] { (byte)(val & 0xff), (byte)((val >> 8) & 0xff),
+                (byte)((val >> 16) & 0xff), (byte)((val >> 24) & 0xff)};
+    }
+
     public static byte[] readBytes(DataInputStream in) throws IOException {
         byte[] dataSize = new byte[4];
         in.readFully(dataSize, 0, 4);
@@ -31,7 +36,7 @@ public class LowLevelFuncad {
     }
 
     public static void writeBytes(DataOutputStream out, byte[] data) throws IOException {
-        byte[] sizeBytes = intTo4Bytes(data.length);
+        byte[] sizeBytes = intTo4BytesLE(data.length);
         out.write(sizeBytes);
         out.write(data);
     }

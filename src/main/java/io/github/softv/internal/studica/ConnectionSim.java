@@ -1,6 +1,5 @@
 package io.github.softv.internal.studica;
 
-import io.github.softv.internal.ParseChannels;
 import io.github.softv.internal.studica.shared.TitanStatic;
 import io.github.softv.internal.studica.shared.VmxStatic;
 import io.github.softv.shufflecad.InfoHolder;
@@ -9,6 +8,7 @@ import org.opencv.core.Mat;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -91,12 +91,12 @@ public class ConnectionSim extends  ConnectionBase
 
     private void update(){
         while (!stopUpdateThread){
-            List<Float> lst = Arrays.asList(TitanStatic.speedMotor0, TitanStatic.speedMotor1,
-                    TitanStatic.speedMotor2, TitanStatic.speedMotor3);
+            List<Float> lst = new ArrayList<>(Arrays.asList(TitanStatic.speedMotor0, TitanStatic.speedMotor1,
+                    TitanStatic.speedMotor2, TitanStatic.speedMotor3));
             lst.addAll(Arrays.asList(VmxStatic.hcdioValues));
             this.setData(lst);
 
-            byte[] values = this.listenChannel.outBytes;
+            byte[] values = this.listenChannel.outBytes.clone();
             if (values.length == 52){
                 ByteBuffer bb = ByteBuffer.wrap(values);
                 bb.order(ByteOrder.LITTLE_ENDIAN);
@@ -112,23 +112,23 @@ public class ConnectionSim extends  ConnectionBase
                 VmxStatic.analog4 = bb.getShort();
                 VmxStatic.yaw = bb.getFloat();
 
-                TitanStatic.limitH0 = bb.getChar() == 1;
-                TitanStatic.limitL0 = bb.getChar() == 1;
-                TitanStatic.limitH1 = bb.getChar() == 1;
-                TitanStatic.limitL1 = bb.getChar() == 1;
-                TitanStatic.limitH2 = bb.getChar() == 1;
-                TitanStatic.limitL2 = bb.getChar() == 1;
-                TitanStatic.limitH3 = bb.getChar() == 1;
-                TitanStatic.limitL3 = bb.getChar() == 1;
+                TitanStatic.limitH0 = bb.get() == 1;
+                TitanStatic.limitL0 = bb.get() == 1;
+                TitanStatic.limitH1 = bb.get() == 1;
+                TitanStatic.limitL1 = bb.get() == 1;
+                TitanStatic.limitH2 = bb.get() == 1;
+                TitanStatic.limitL2 = bb.get() == 1;
+                TitanStatic.limitH3 = bb.get() == 1;
+                TitanStatic.limitL3 = bb.get() == 1;
 
-                VmxStatic.flex0 = bb.getChar() == 1;
-                VmxStatic.flex1 = bb.getChar() == 1;
-                VmxStatic.flex2 = bb.getChar() == 1;
-                VmxStatic.flex3 = bb.getChar() == 1;
-                VmxStatic.flex4 = bb.getChar() == 1;
-                VmxStatic.flex5 = bb.getChar() == 1;
-                VmxStatic.flex6 = bb.getChar() == 1;
-                VmxStatic.flex7 = bb.getChar() == 1;
+                VmxStatic.flex0 = bb.get() == 1;
+                VmxStatic.flex1 = bb.get() == 1;
+                VmxStatic.flex2 = bb.get() == 1;
+                VmxStatic.flex3 = bb.get() == 1;
+                VmxStatic.flex4 = bb.get() == 1;
+                VmxStatic.flex5 = bb.get() == 1;
+                VmxStatic.flex6 = bb.get() == 1;
+                VmxStatic.flex7 = bb.get() == 1;
             }
 
             try { Thread.sleep(4); }
