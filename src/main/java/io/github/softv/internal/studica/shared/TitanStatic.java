@@ -1,4 +1,4 @@
-package io.github.crackanddie.pycad;
+package io.github.softv.internal.studica.shared;
 
 public class TitanStatic {
     public static float speedMotor0 = 0;

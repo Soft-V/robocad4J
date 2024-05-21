@@ -1,9 +1,9 @@
-package io.github.crackanddie.pycad;
+package io.github.softv.internal.studica;
 
-import io.github.crackanddie.common.Funcad;
-import io.github.crackanddie.jni.JavaWrapper;
-import io.github.crackanddie.jni.LibHolder;
-import io.github.crackanddie.shufflecad.InfoHolder;
+import io.github.softv.internal.LowLevelFuncad;
+import io.github.softv.internal.studica.jni.LibHolder;
+import io.github.softv.internal.studica.shared.VmxStatic;
+import io.github.softv.shufflecad.InfoHolder;
 
 import java.util.Arrays;
 
@@ -63,32 +63,32 @@ public class SPI {
         if ((data[0] & 0xff) == 1){
             int yawU = (data[2] & 0xff) << 8 | (data[1] & 0xff);
             int us1U = (data[4] & 0xff) << 8 | (data[3] & 0xff);
-            VMXStatic.ultrasound1 = us1U / 100.0f;
+            VmxStatic.ultrasound1 = us1U / 100.0f;
             int us2U = (data[6] & 0xff) << 8 | (data[5] & 0xff);
-            VMXStatic.ultrasound2 = us2U / 100.0f;
+            VmxStatic.ultrasound2 = us2U / 100.0f;
 
             float power = ((data[8] & 0xff) << 8 | (data[7] & 0xff)) / 100.0f;
             InfoHolder.power = String.valueOf(power);
 
-            float yaw = (yawU / 100.0f) * (Funcad.accessBit(data[9], 1) ? 1 : -1);
-            calcYawUnlim(yaw, VMXStatic.yaw);
-            VMXStatic.yaw = yaw;
+            float yaw = (yawU / 100.0f) * (LowLevelFuncad.accessBit(data[9], 1) ? 1 : -1);
+            calcYawUnlim(yaw, VmxStatic.yaw);
+            VmxStatic.yaw = yaw;
 
-            VMXStatic.flex0 = Funcad.accessBit(data[9], 2);
-            VMXStatic.flex1 = Funcad.accessBit(data[9], 3);
-            VMXStatic.flex2 = Funcad.accessBit(data[9], 4);
-            VMXStatic.flex3 = Funcad.accessBit(data[9], 5);
-            VMXStatic.flex4 = Funcad.accessBit(data[9], 6);
+            VmxStatic.flex0 = LowLevelFuncad.accessBit(data[9], 2);
+            VmxStatic.flex1 = LowLevelFuncad.accessBit(data[9], 3);
+            VmxStatic.flex2 = LowLevelFuncad.accessBit(data[9], 4);
+            VmxStatic.flex3 = LowLevelFuncad.accessBit(data[9], 5);
+            VmxStatic.flex4 = LowLevelFuncad.accessBit(data[9], 6);
         }
         else if ((data[0] & 0xff) == 2){
-            VMXStatic.analog1 = (data[2] & 0xff) << 8 | (data[1] & 0xff);
-            VMXStatic.analog2 = (data[4] & 0xff) << 8 | (data[3] & 0xff);
-            VMXStatic.analog3 = (data[6] & 0xff) << 8 | (data[5] & 0xff);
-            VMXStatic.analog4 = (data[8] & 0xff) << 8 | (data[7] & 0xff);
+            VmxStatic.analog1 = (data[2] & 0xff) << 8 | (data[1] & 0xff);
+            VmxStatic.analog2 = (data[4] & 0xff) << 8 | (data[3] & 0xff);
+            VmxStatic.analog3 = (data[6] & 0xff) << 8 | (data[5] & 0xff);
+            VmxStatic.analog4 = (data[8] & 0xff) << 8 | (data[7] & 0xff);
 
-            VMXStatic.flex5 = Funcad.accessBit(data[9], 1);
-            VMXStatic.flex6 = Funcad.accessBit(data[9], 2);
-            VMXStatic.flex7 = Funcad.accessBit(data[9], 3);
+            VmxStatic.flex5 = LowLevelFuncad.accessBit(data[9], 1);
+            VmxStatic.flex6 = LowLevelFuncad.accessBit(data[9], 2);
+            VmxStatic.flex7 = LowLevelFuncad.accessBit(data[9], 3);
         }
     }
 
@@ -111,6 +111,6 @@ public class SPI {
             delta = (180 + oldYaw) * -1;
             delta += (180 - newYaw) * -1;
         }
-        VMXStatic.yaw_unlim += delta;
+        VmxStatic.yaw_unlim += delta;
     }
 }

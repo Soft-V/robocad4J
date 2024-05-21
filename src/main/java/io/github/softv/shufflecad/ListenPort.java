@@ -1,6 +1,6 @@
-package io.github.crackanddie.shufflecad;
+package io.github.softv.shufflecad;
 
-import io.github.crackanddie.robocadSim.Holder;
+import io.github.softv.Common;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 
 public class ListenPort
 {
@@ -76,9 +74,9 @@ public class ListenPort
                 // there could be a error
             }
 
-            if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
+            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
             {
-                System.out.println(Holder.ANSI_CYAN + "Connected " + this.port + Holder.ANSI_RESET);
+                System.out.println(Common.ANSI_CYAN + "Connected " + this.port + Common.ANSI_RESET);
             }
 
             while (!this.stopThread)
@@ -96,9 +94,9 @@ public class ListenPort
                 Thread.sleep(delay);
             }
 
-            if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
+            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
             {
-                System.out.println(Holder.ANSI_CYAN + "Disconnected " + this.port + Holder.ANSI_RESET);
+                System.out.println(Common.ANSI_CYAN + "Disconnected " + this.port + Common.ANSI_RESET);
             }
 
             this.sct.close();

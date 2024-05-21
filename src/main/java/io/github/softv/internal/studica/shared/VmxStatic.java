@@ -1,10 +1,10 @@
-package io.github.crackanddie.pycad;
+package io.github.softv.internal.studica.shared;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
-public class VMXStatic {
+public class VmxStatic {
     private static final int[] HCDIO_CONST_ARRAY = { 4, 18, 17, 27, 23, 22, 24, 25, 7, 5 };
 
     public static float yaw = 0;
@@ -28,18 +28,28 @@ public class VMXStatic {
     public static boolean flex6 = false;
     public static boolean flex7 = false;
 
+    public static Float[] hcdioValues = new Float[] {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
+
     public static void setServoAngle(float angle, int pin){
         double dut = 0.000666 * angle + 0.05;
+        hcdioValues[pin] = (float)dut;
         echoToFile(HCDIO_CONST_ARRAY[pin] + "=" + dut);
     }
 
     public static void setLedState(boolean state, int pin){
         double dut = state ? 0.2 : 0.0;
+        hcdioValues[pin] = (float)dut;
         echoToFile(HCDIO_CONST_ARRAY[pin] + "=" + dut);
     }
 
     public static void setServoPWM(float dut, int pin){
+        hcdioValues[pin] = (float)dut;
         echoToFile(HCDIO_CONST_ARRAY[pin] + "=" + dut);
+    }
+
+    public static void disableServo(int pin){
+        hcdioValues[pin] = 0.0f;
+        echoToFile(HCDIO_CONST_ARRAY[pin] + "=" + "0.0");
     }
 
     private static void echoToFile(String val){

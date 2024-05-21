@@ -1,6 +1,6 @@
-package io.github.crackanddie.shufflecad;
+package io.github.softv.shufflecad;
 
-import io.github.crackanddie.common.LoggerInside;
+import io.github.softv.internal.LoggerInside;
 
 public class Shufflecad {
     public static void start(){

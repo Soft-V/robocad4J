@@ -1,4 +1,7 @@
-package io.github.crackanddie.robocadSim;
+package io.github.softv.internal.studica;
+
+import io.github.softv.Common;
+import io.github.softv.internal.LowLevelFuncad;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,7 +15,7 @@ public class TalkPort
     private final int port;
 
     private boolean stopThread = false;
-    public String outString = "";
+    public byte[] outBytes = new byte[0];
 
     private Socket sct;
     private Thread thread;
@@ -55,23 +58,22 @@ public class TalkPort
                 // there could be a error
             }
 
-            if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
+            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
             {
-                System.out.println(Holder.ANSI_CYAN + "Connected " + this.port + Holder.ANSI_RESET);
+                System.out.println(Common.ANSI_CYAN + "Connected " + this.port + Common.ANSI_RESET);
             }
 
             while (!this.stopThread)
             {
-                out.write((this.outString + "$").getBytes(StandardCharsets.UTF_16LE));
-                byte[] message = new byte[4];
-                in.readFully(message, 0, message.length);
+                LowLevelFuncad.writeBytes(out, this.outBytes);
+                byte[] _unused_ = LowLevelFuncad.readBytes(in);
 
                 Thread.sleep(4);
             }
 
-            if (Holder.LOG_LEVEL < Holder.LOG_EXC_INFO)
+            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
             {
-                System.out.println(Holder.ANSI_CYAN + "Disconnected " + this.port + Holder.ANSI_RESET);
+                System.out.println(Common.ANSI_CYAN + "Disconnected " + this.port + Common.ANSI_RESET);
             }
 
             this.sct.shutdownInput();
@@ -86,7 +88,7 @@ public class TalkPort
 
     private void resetOut()
     {
-        this.outString = "";
+        this.outBytes = new byte[0];
     }
 
     public void stopTalking()
@@ -112,10 +114,10 @@ public class TalkPort
                 {
                     if (LocalDateTime.now().toLocalTime().toSecondOfDay() - stTime > 1)
                     {
-                        if (Holder.LOG_LEVEL < Holder.LOG_EXC_WARN)
+                        if (Common.LOG_LEVEL < Common.LOG_EXC_WARN)
                         {
-                            System.out.println(Holder.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
-                                    this.port + Holder.ANSI_RESET);
+                            System.out.println(Common.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
+                                    this.port + Common.ANSI_RESET);
                         }
                         try
                         {

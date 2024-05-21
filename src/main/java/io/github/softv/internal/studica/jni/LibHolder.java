@@ -1,4 +1,4 @@
-package io.github.crackanddie.jni;
+package io.github.softv.internal.studica.jni;
 
 public class LibHolder {
     private static JavaWrapper instance;
