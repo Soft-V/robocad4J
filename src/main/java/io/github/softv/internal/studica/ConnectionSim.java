@@ -7,6 +7,8 @@ import io.github.softv.shufflecad.InfoHolder;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class ConnectionSim extends  ConnectionBase
     {
         this.talkChannel = new TalkPort(PORT_SET_DATA);
         this.listenChannel = new ListenPort(PORT_GET_DATA);
-        this.cameraChannel = new ListenPort(PORT_CAMERA, true);
+        this.cameraChannel = new ListenPort(PORT_CAMERA);
 
         this.talkChannel.startTalking();
         this.listenChannel.startListening();
@@ -66,12 +68,12 @@ public class ConnectionSim extends  ConnectionBase
 
     private void setData(List<Float> lst)
     {
-        this.talkChannel.outString = ParseChannels.JoinFloatChannel(lst);
-    }
-
-    private List<Float> getData()
-    {
-        return ParseChannels.ParseFloatChannel(this.listenChannel.outString);
+        ByteBuffer bb = ByteBuffer.allocate(lst.size() * 4);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        for (Float i: lst) {
+            bb.putFloat(i);
+        }
+        this.talkChannel.outBytes = bb.array();
     }
 
     @Override
@@ -94,10 +96,43 @@ public class ConnectionSim extends  ConnectionBase
             lst.addAll(Arrays.asList(VmxStatic.hcdioValues));
             this.setData(lst);
 
-            var values = getData();
-            if (!values.isEmpty()){
-                TitanStatic.encMotor0 = values.get(0);
+            byte[] values = this.listenChannel.outBytes;
+            if (values.length == 52){
+                ByteBuffer bb = ByteBuffer.wrap(values);
+                bb.order(ByteOrder.LITTLE_ENDIAN);
+                TitanStatic.encMotor0 = bb.getInt();
+                TitanStatic.encMotor1 = bb.getInt();
+                TitanStatic.encMotor2 = bb.getInt();
+                TitanStatic.encMotor3 = bb.getInt();
+                VmxStatic.ultrasound1 = bb.getFloat();
+                VmxStatic.ultrasound2 = bb.getFloat();
+                VmxStatic.analog1 = bb.getShort();
+                VmxStatic.analog2 = bb.getShort();
+                VmxStatic.analog3 = bb.getShort();
+                VmxStatic.analog4 = bb.getShort();
+                VmxStatic.yaw = bb.getFloat();
+
+                TitanStatic.limitH0 = bb.getChar() == 1;
+                TitanStatic.limitL0 = bb.getChar() == 1;
+                TitanStatic.limitH1 = bb.getChar() == 1;
+                TitanStatic.limitL1 = bb.getChar() == 1;
+                TitanStatic.limitH2 = bb.getChar() == 1;
+                TitanStatic.limitL2 = bb.getChar() == 1;
+                TitanStatic.limitH3 = bb.getChar() == 1;
+                TitanStatic.limitL3 = bb.getChar() == 1;
+
+                VmxStatic.flex0 = bb.getChar() == 1;
+                VmxStatic.flex1 = bb.getChar() == 1;
+                VmxStatic.flex2 = bb.getChar() == 1;
+                VmxStatic.flex3 = bb.getChar() == 1;
+                VmxStatic.flex4 = bb.getChar() == 1;
+                VmxStatic.flex5 = bb.getChar() == 1;
+                VmxStatic.flex6 = bb.getChar() == 1;
+                VmxStatic.flex7 = bb.getChar() == 1;
             }
+
+            try { Thread.sleep(4); }
+            catch (InterruptedException e){}
         }
     }
 }
