@@ -112,7 +112,7 @@ public class RobotVmxTitan {
                 TitanStatic.limitH3, TitanStatic.limitL3,};
     }
 
-    public boolean[] getVMXFlex() {
+    public boolean[] getVmxFlex() {
         return new boolean[] { VmxStatic.flex0, VmxStatic.flex1, VmxStatic.flex2, VmxStatic.flex3,
                 VmxStatic.flex4, VmxStatic.flex5, VmxStatic.flex6, VmxStatic.flex7 };
     }

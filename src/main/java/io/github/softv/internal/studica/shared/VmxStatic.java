@@ -1,5 +1,7 @@
 package io.github.softv.internal.studica.shared;
 
+import io.github.softv.Common;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -53,6 +55,8 @@ public class VmxStatic {
     }
 
     private static void echoToFile(String val){
+        if (!Common.onRealRobot)
+            return;
         final String file = "/dev/pi-blaster";
         try (PrintWriter out = new PrintWriter(new FileOutputStream(file), true)) {
             out.println(val);

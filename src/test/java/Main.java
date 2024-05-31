@@ -25,7 +25,11 @@ public class Main {
             if (robot.getCameraImage() != null)
                 cv.setMat(robot.getCameraImage());
             System.out.println(LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis);
-            System.out.println(robot.getAnalog1());
+            // System.out.println(robot.getAnalog1());
+            System.out.println(robot.getVmxFlex()[0]);
+            System.out.println(robot.getVmxFlex()[1]);
+            System.out.println(robot.getVmxFlex()[2]);
+            System.out.println(robot.getVmxFlex()[3]);
             Thread.sleep(1000);
             InfoHolder.power = String.valueOf(12 + (LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis) / 10000.f);
         }
