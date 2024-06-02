@@ -1,9 +1,9 @@
 package io.github.softv.internal.studica;
 
+import io.github.softv.Common;
 import io.github.softv.internal.LowLevelFuncad;
 import io.github.softv.internal.studica.jni.LibHolder;
 import io.github.softv.internal.studica.shared.VmxStatic;
-import io.github.softv.shufflecad.InfoHolder;
 
 import java.util.Arrays;
 
@@ -28,7 +28,7 @@ public class SPI {
             while (!stopThread){
                 long txTime = System.currentTimeMillis();
                 byte[] txList = setUpTxData();
-                InfoHolder.txSpiTimeDev = String.valueOf(System.currentTimeMillis() - txTime);
+                Common.txSpiTimeDev = System.currentTimeMillis() - txTime;
 
                 byte[] rxList = LibHolder.getInstance().readWriteSPI(txList, txList.length);
 
@@ -38,24 +38,24 @@ public class SPI {
 
                 long rxTime = System.currentTimeMillis();
                 setUpRxData(rxList);
-                InfoHolder.rxSpiTimeDev = String.valueOf(System.currentTimeMillis() - rxTime);
+                Common.rxSpiTimeDev = System.currentTimeMillis() - rxTime;
 
                 commCounter++;
                 if (System.currentTimeMillis() - sendCountTime > 1000){
                     sendCountTime = System.currentTimeMillis();
-                    InfoHolder.spiCountDev = String.valueOf(commCounter);
+                    Common.spiCountDev = commCounter;
                     commCounter = 0;
                 }
 
                 Thread.sleep(2);
-                InfoHolder.spiTimeDev = String.format("%.2f", (System.currentTimeMillis() - stTime) / 1000.0f);
+                Common.spiTimeDev = (System.currentTimeMillis() - stTime) / 1000.0f;
                 stTime = System.currentTimeMillis();
             }
         }
         catch (Exception e){
             LibHolder.getInstance().stopSPI();
-            InfoHolder.logger.writeMainLog(e.getMessage());
-            InfoHolder.logger.writeMainLog(Arrays.toString(e.getStackTrace()));
+            Common.logger.writeMainLog(e.getMessage());
+            Common.logger.writeMainLog(Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -68,7 +68,7 @@ public class SPI {
             VmxStatic.ultrasound2 = us2U / 100.0f;
 
             float power = ((data[8] & 0xff) << 8 | (data[7] & 0xff)) / 100.0f;
-            InfoHolder.power = String.valueOf(power);
+            Common.power = power;
 
             float yaw = (yawU / 100.0f) * (LowLevelFuncad.accessBit(data[9], 1) ? 1 : -1);
             calcYawUnlim(yaw, VmxStatic.yaw);

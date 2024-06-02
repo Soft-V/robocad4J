@@ -1,15 +1,15 @@
 package io.github.softv.shufflecad;
 
+import io.github.softv.Common;
 import io.github.softv.internal.LoggerInside;
 
 public class Shufflecad {
     public static void start(){
-        InfoHolder.logger = new LoggerInside();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                InfoHolder.logger.writeMainLog("Program stopped");
-                InfoHolder.logger.writeMainLog("Signal handler called with signal (IDK it's Java)");
+                Common.logger.writeMainLog("Program stopped");
+                Common.logger.writeMainLog("Signal handler called with signal (IDK it's Java)");
                 ConnectionHelper.stop();
                 // maybe exception should be thrown ?
             }
@@ -23,10 +23,10 @@ public class Shufflecad {
 
     public static IVariable addVar(IVariable variable){
         if (variable instanceof CameraVariable){
-            InfoHolder.cameraVariablesArray.add((CameraVariable) variable);
+            ShufflecadHolder.cameraVariablesArray.add((CameraVariable) variable);
         }
         else{
-            InfoHolder.variablesArray.add((ShuffleVariable) variable);
+            ShufflecadHolder.variablesArray.add((ShuffleVariable) variable);
         }
         return variable;
     }

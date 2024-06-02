@@ -1,10 +1,10 @@
 package io.github.softv.studica;
 
 import io.github.softv.Common;
+import io.github.softv.internal.LoggerInside;
 import io.github.softv.internal.studica.*;
 import io.github.softv.internal.studica.shared.TitanStatic;
 import io.github.softv.internal.studica.shared.VmxStatic;
-import io.github.softv.shufflecad.InfoHolder;
 import io.github.softv.shufflecad.Shufflecad;
 import org.opencv.core.Mat;
 
@@ -27,7 +27,8 @@ public class RobotVmxTitan {
             }
         }));
 
-        InfoHolder.onRealRobot = isRealRobot;
+        Common.logger = new LoggerInside();
+        Common.onRealRobot = isRealRobot;
         Shufflecad.start();
 
         if (!isRealRobot) {
@@ -42,7 +43,7 @@ public class RobotVmxTitan {
     public void stop() throws InterruptedException {
         Shufflecad.stop();
         connection.stop();
-        InfoHolder.logger.writeMainLog("Program stopped");
+        Common.logger.writeMainLog("Program stopped");
     }
 
     public void setMotorSpeed0(float speed) {

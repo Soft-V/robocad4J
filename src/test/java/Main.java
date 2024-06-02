@@ -1,6 +1,5 @@
 import io.github.softv.Common;
 import io.github.softv.shufflecad.CameraVariable;
-import io.github.softv.shufflecad.InfoHolder;
 import io.github.softv.shufflecad.Shufflecad;
 import io.github.softv.studica.RobotVmxTitan;
 
@@ -31,7 +30,7 @@ public class Main {
             System.out.println(robot.getVmxFlex()[2]);
             System.out.println(robot.getVmxFlex()[3]);
             Thread.sleep(1000);
-            InfoHolder.power = String.valueOf(12 + (LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis) / 10000.f);
+            Common.power = 12 + (LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis) / 10000.f;
         }
         robot.setMotorSpeed0(0);
         robot.setMotorSpeed1(0);

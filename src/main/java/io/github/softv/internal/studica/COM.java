@@ -1,9 +1,9 @@
 package io.github.softv.internal.studica;
 
+import io.github.softv.Common;
 import io.github.softv.internal.LowLevelFuncad;
 import io.github.softv.internal.studica.jni.LibHolder;
 import io.github.softv.internal.studica.shared.TitanStatic;
-import io.github.softv.shufflecad.InfoHolder;
 
 import java.util.Arrays;
 
@@ -26,7 +26,7 @@ public class COM {
             while (!stopThread) {
                 long txTime = System.currentTimeMillis();
                 byte[] txList = setUpTxData();
-                InfoHolder.txComTimeDev = String.valueOf(System.currentTimeMillis() - txTime);
+                Common.txComTimeDev = System.currentTimeMillis() - txTime;
 
                 byte[] rxList = LibHolder.getInstance().readWriteUSB(txList, txList.length);
 
@@ -36,23 +36,23 @@ public class COM {
 
                 long rxTime = System.currentTimeMillis();
                 setUpRxData(rxList);
-                InfoHolder.rxComTimeDev = String.valueOf(System.currentTimeMillis() - rxTime);
+                Common.rxComTimeDev = System.currentTimeMillis() - rxTime;
 
                 commCounter++;
                 if (System.currentTimeMillis() - sendCountTime > 1000) {
                     sendCountTime = System.currentTimeMillis();
-                    InfoHolder.comCountDev = String.valueOf(commCounter);
+                    Common.comCountDev = commCounter;
                     commCounter = 0;
                 }
 
                 Thread.sleep(2);
-                InfoHolder.comTimeDev = String.format("%.2f", (System.currentTimeMillis() - stTime) / 1000.0f);
+                Common.comTimeDev = (System.currentTimeMillis() - stTime) / 1000.0f;
                 stTime = System.currentTimeMillis();
             }
         } catch (Exception e) {
             LibHolder.getInstance().stopUSB();
-            InfoHolder.logger.writeMainLog(e.getMessage());
-            InfoHolder.logger.writeMainLog(Arrays.toString(e.getStackTrace()));
+            Common.logger.writeMainLog(e.getMessage());
+            Common.logger.writeMainLog(Arrays.toString(e.getStackTrace()));
         }
     }
 

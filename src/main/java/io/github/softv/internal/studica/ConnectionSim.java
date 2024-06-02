@@ -1,8 +1,8 @@
 package io.github.softv.internal.studica;
 
+import io.github.softv.Common;
 import io.github.softv.internal.studica.shared.TitanStatic;
 import io.github.softv.internal.studica.shared.VmxStatic;
-import io.github.softv.shufflecad.InfoHolder;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -49,7 +49,7 @@ public class ConnectionSim extends  ConnectionBase
         this.updateThread.start();
 
         // todo: update power
-        InfoHolder.power = "12";
+        Common.power = 12;
     }
 
     @Override

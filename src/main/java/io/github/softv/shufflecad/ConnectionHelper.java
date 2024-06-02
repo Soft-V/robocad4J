@@ -1,5 +1,7 @@
 package io.github.softv.shufflecad;
 
+import io.github.softv.Common;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ public class ConnectionHelper {
 
     private static final ICallback outVarsCallback = () -> {
         List<String> strings = new ArrayList<>();
-        for (ShuffleVariable v : InfoHolder.variablesArray) {
+        for (ShuffleVariable v : ShufflecadHolder.variablesArray) {
             if (!v.type.equals(ShuffleVariable.CHART_TYPE)){
                 strings.add(String.format("%1$s;%2$s;%3$s;%4$s", v.name, v.getString(), v.type, v.direction));
             }
@@ -33,7 +35,7 @@ public class ConnectionHelper {
             String[] strings = inVariablesChannel.outString.split("&");
             for (String v : strings){
                 String[] params = v.split(";");
-                for (ShuffleVariable sv : InfoHolder.variablesArray){
+                for (ShuffleVariable sv : ShufflecadHolder.variablesArray){
                     if (sv.name.equals(params[0])){
                         sv.setString(params[1]);
                         break;
@@ -45,7 +47,7 @@ public class ConnectionHelper {
 
     private static final ICallback chartVarsCallback = () -> {
         List<String> strings = new ArrayList<>();
-        for (ShuffleVariable v : InfoHolder.variablesArray) {
+        for (ShuffleVariable v : ShufflecadHolder.variablesArray) {
             if (v.type.equals(ShuffleVariable.CHART_TYPE)){
                 strings.add(String.format("%1$s;%2$s", v.name, v.getString()));
             }
@@ -59,9 +61,9 @@ public class ConnectionHelper {
     };
 
     private static final ICallback outcadVarsCallback = () -> {
-        if (InfoHolder.getPrintArray().size() > 0){
-            outcadVariablesChannel.outString = String.join("&", InfoHolder.getPrintArray());
-            InfoHolder.clearPrintArray();
+        if (ShufflecadHolder.getPrintArray().size() > 0){
+            outcadVariablesChannel.outString = String.join("&", ShufflecadHolder.getPrintArray());
+            ShufflecadHolder.clearPrintArray();
         }
         else{
             outcadVariablesChannel.outString = "null";
@@ -69,25 +71,25 @@ public class ConnectionHelper {
     };
 
     private static final ICallback rpiVarsCallback = () -> {
-        String[] outArray = { InfoHolder.temperature, InfoHolder.memoryLoad,
-                              InfoHolder.cpuLoad, InfoHolder.power, InfoHolder.spiTimeDev,
-                              InfoHolder.rxSpiTimeDev, InfoHolder.txSpiTimeDev,
-                              InfoHolder.spiCountDev, InfoHolder.comTimeDev,
-                              InfoHolder.rxComTimeDev, InfoHolder.txComTimeDev,
-                              InfoHolder.comCountDev};
+        String[] outArray = { Float.toString(Common.temperature), Float.toString(Common.memoryLoad),
+                Float.toString(Common.cpuLoad), Float.toString(Common.power), Float.toString(Common.spiTimeDev),
+                Float.toString(Common.rxSpiTimeDev), Float.toString(Common.txSpiTimeDev),
+                Float.toString(Common.spiCountDev), Float.toString(Common.comTimeDev),
+                Float.toString(Common.rxComTimeDev), Float.toString(Common.txComTimeDev),
+                Float.toString(Common.comCountDev)};
         rpiVariablesChannel.outString = String.join("&", outArray);
     };
 
     private static int cameraToggler = 0;
 
     private static final ICallback cameraVarsCallback = () -> {
-        if (InfoHolder.cameraVariablesArray.size() > 0){
+        if (ShufflecadHolder.cameraVariablesArray.size() > 0){
             if (cameraVariablesChannel.strFromClient.equals("-1")){
-                CameraVariable currVar = InfoHolder.cameraVariablesArray.get(cameraToggler);
+                CameraVariable currVar = ShufflecadHolder.cameraVariablesArray.get(cameraToggler);
                 cameraVariablesChannel.outString = String.format("%1$s;%2$s:%3$s", currVar.name, currVar.shape.width, currVar.shape.height);
                 cameraVariablesChannel.outBytes = currVar.getValue();
 
-                if (cameraToggler + 1 == InfoHolder.cameraVariablesArray.size()){
+                if (cameraToggler + 1 == ShufflecadHolder.cameraVariablesArray.size()){
                     cameraToggler = 0;
                 }
                 else{
@@ -95,7 +97,7 @@ public class ConnectionHelper {
                 }
             }
             else{
-                CameraVariable currVar = InfoHolder.cameraVariablesArray.get(Integer.parseInt(cameraVariablesChannel.strFromClient));
+                CameraVariable currVar = ShufflecadHolder.cameraVariablesArray.get(Integer.parseInt(cameraVariablesChannel.strFromClient));
                 cameraVariablesChannel.outString = String.format("%1$s;%2$s:%3$s", currVar.name, currVar.shape.width, currVar.shape.height);
                 cameraVariablesChannel.outBytes = currVar.getValue();
             }
@@ -111,11 +113,11 @@ public class ConnectionHelper {
             String[] strings = joyVariablesChannel.outString.split("&");
             for (String v : strings){
                 String[] params = v.split(";");
-                if (InfoHolder.joystickValues.containsKey(params[0])){
-                    InfoHolder.joystickValues.replace(params[0], Integer.parseInt(params[1]));
+                if (ShufflecadHolder.joystickValues.containsKey(params[0])){
+                    ShufflecadHolder.joystickValues.replace(params[0], Integer.parseInt(params[1]));
                 }
                 else{
-                    InfoHolder.joystickValues.put(params[0], Integer.parseInt(params[1]));
+                    ShufflecadHolder.joystickValues.put(params[0], Integer.parseInt(params[1]));
                 }
             }
         }
