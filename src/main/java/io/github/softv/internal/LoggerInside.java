@@ -1,11 +1,31 @@
 package io.github.softv.internal;
 
-public class LoggerInside {
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
-    public LoggerInside(){
+public class LoggerInside {
+    private BufferedWriter writer = null;
+
+    public LoggerInside(String path) {
+        try {
+            writer = new BufferedWriter(new FileWriter(path));
+        } catch (IOException ignored) { }
     }
 
-    public synchronized void writeMainLog(String s){
+    public synchronized void log(String s) {
+        if (writer == null)
+            return;
+        try {
+            writer.append(s);
+        } catch (IOException ignored) { }
+    }
 
+    public synchronized void close() {
+        if (writer == null)
+            return;
+        try {
+            writer.close();
+        } catch (IOException ignored) { }
     }
 }

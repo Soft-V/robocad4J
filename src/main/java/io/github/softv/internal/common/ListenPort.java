@@ -1,6 +1,5 @@
-package io.github.softv.internal.studica;
+package io.github.softv.internal.common;
 
-import io.github.softv.Common;
 import io.github.softv.internal.LowLevelFuncad;
 
 import java.io.*;
@@ -11,6 +10,7 @@ import java.time.LocalDateTime;
 public class ListenPort
 {
     private final int port;
+    private final Robot robot;
 
     private boolean stopThread = false;
     public byte[] outBytes = new byte[0];
@@ -18,9 +18,10 @@ public class ListenPort
     private Socket sct;
     private Thread thread;
 
-    public ListenPort(int port)
+    public ListenPort(Robot robot, int port)
     {
         this.port = port;
+        this.robot = robot;
     }
 
     public void startListening()
@@ -35,12 +36,20 @@ public class ListenPort
         {
             this.sct = new Socket("localhost", this.port);
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             // there could be an error
+            this.robot.writeLog("LP: Failed to connect on port " + this.port);
+            System.out.println("LP: Failed to connect on port " + this.port);
+            try
+            {
+                this.sct.shutdownInput();
+                this.sct.shutdownOutput();
+                this.sct.close();
+            }
+            catch (Exception ignored) {}
+            return;
         }
-
-        this.stopThread = false;
 
         try
         {
@@ -51,15 +60,9 @@ public class ListenPort
             {
                 Thread.sleep(100);
             }
-            catch (InterruptedException e)
-            {
-                // there could be a error
-            }
+            catch (InterruptedException ignored) {}
 
-            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
-            {
-                System.out.println(Common.ANSI_CYAN + "Connected " + this.port + Common.ANSI_RESET);
-            }
+            this.robot.writeLog("LP: Connected " + this.port);
 
             while (!this.stopThread)
             {
@@ -69,10 +72,7 @@ public class ListenPort
                 Thread.sleep(4);
             }
 
-            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
-            {
-                System.out.println(Common.ANSI_CYAN + "Disconnected " + this.port + Common.ANSI_RESET);
-            }
+            this.robot.writeLog("LP: Disconnected " + this.port);
 
             this.sct.shutdownInput();
             this.sct.shutdownOutput();
@@ -103,6 +103,7 @@ public class ListenPort
             catch (IOException e)
             {
                 // there could be a error
+                this.robot.writeLog("Something went wrong while shutting down socket on port " + this.port);
             }
 
             if (this.thread != null)
@@ -112,11 +113,7 @@ public class ListenPort
                 {
                     if (LocalDateTime.now().toLocalTime().toSecondOfDay() - stTime > 1)
                     {
-                        if (Common.LOG_LEVEL < Common.LOG_EXC_WARN)
-                        {
-                            System.out.println(Common.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
-                                    this.port + Common.ANSI_RESET);
-                        }
+                        this.robot.writeLog("Something went wrong. Rude disconnection on port " + this.port);
                         try
                         {
                             this.sct.close();
@@ -124,8 +121,8 @@ public class ListenPort
                         catch (IOException e)
                         {
                             // there could be a error
+                            this.robot.writeLog("Something went wrong while closing socket on port " + this.port);
                         }
-
                     }
                 }
             }

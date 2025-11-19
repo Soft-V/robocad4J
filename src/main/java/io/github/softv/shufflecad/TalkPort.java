@@ -1,6 +1,6 @@
 package io.github.softv.shufflecad;
 
-import io.github.softv.Common;
+import io.github.softv.internal.common.Robot;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 public class TalkPort {
     private final int port;
+    private final Robot robot;
 
     private boolean stopThread = false;
     public String outString = "null";
@@ -27,8 +28,9 @@ public class TalkPort {
 
     private final boolean isCamera;
 
-    public TalkPort(int port, ICallback callback, int delay, boolean isCamera)
+    public TalkPort(Robot robot, int port, ICallback callback, int delay, boolean isCamera)
     {
+        this.robot = robot;
         this.port = port;
         this.callbackMethod = callback;
         this.delay = delay;
@@ -55,12 +57,17 @@ public class TalkPort {
             this.sct.bind(new InetSocketAddress("0.0.0.0", this.port));
             this.sct.setReuseAddress(true);
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             // there could be a error
+            try
+            {
+                this.sct.close();
+            }
+            catch (Exception ignored) { }
+            this.robot.writeLog("Shufflecad TP: Failed to connect on port " + this.port);
+            return;
         }
-
-        this.stopThread = false;
 
         try
         {
@@ -72,15 +79,7 @@ public class TalkPort {
             {
                 Thread.sleep(100);
             }
-            catch (InterruptedException e)
-            {
-                // there could be a error
-            }
-
-            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
-            {
-                System.out.println(Common.ANSI_CYAN + "Connected " + this.port + Common.ANSI_RESET);
-            }
+            catch (InterruptedException ignored) { }
 
             while (!this.stopThread)
             {
@@ -107,16 +106,10 @@ public class TalkPort {
                 Thread.sleep(this.delay);
             }
 
-            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
-            {
-                System.out.println(Common.ANSI_CYAN + "Disconnected " + this.port + Common.ANSI_RESET);
-            }
-
             this.sct.close();
         }
         catch (IOException | InterruptedException | NullPointerException e)
         {
-            System.out.println(Common.ANSI_CYAN + "Exception " + e + this.port + Common.ANSI_RESET);
         }
     }
 

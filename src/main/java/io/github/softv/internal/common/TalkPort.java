@@ -1,18 +1,17 @@
-package io.github.softv.internal.studica;
+package io.github.softv.internal.common;
 
-import io.github.softv.Common;
 import io.github.softv.internal.LowLevelFuncad;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 public class TalkPort
 {
     private final int port;
+    private final Robot robot;
 
     private boolean stopThread = false;
     public byte[] outBytes = new byte[0];
@@ -20,9 +19,10 @@ public class TalkPort
     private Socket sct;
     private Thread thread;
 
-    public TalkPort(int port)
+    public TalkPort(Robot robot, int port)
     {
         this.port = port;
+        this.robot = robot;
     }
 
     public void startTalking()
@@ -37,12 +37,20 @@ public class TalkPort
         {
             this.sct = new Socket("localhost", this.port);
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             // there could be a error
+            this.robot.writeLog("TP: Failed to connect on port " + this.port);
+            System.out.println("TP: Failed to connect on port " + this.port);
+            try
+            {
+                this.sct.shutdownInput();
+                this.sct.shutdownOutput();
+                this.sct.close();
+            }
+            catch (Exception ignored) {}
+            return;
         }
-
-        this.stopThread = false;
 
         try
         {
@@ -53,15 +61,9 @@ public class TalkPort
             {
                 Thread.sleep(100);
             }
-            catch (InterruptedException e)
-            {
-                // there could be a error
-            }
+            catch (InterruptedException ignored) { }
 
-            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
-            {
-                System.out.println(Common.ANSI_CYAN + "Connected " + this.port + Common.ANSI_RESET);
-            }
+            this.robot.writeLog("TP: Connected " + this.port);
 
             while (!this.stopThread)
             {
@@ -71,10 +73,7 @@ public class TalkPort
                 Thread.sleep(4);
             }
 
-            if (Common.LOG_LEVEL < Common.LOG_EXC_INFO)
-            {
-                System.out.println(Common.ANSI_CYAN + "Disconnected " + this.port + Common.ANSI_RESET);
-            }
+            this.robot.writeLog("TP: Disconnected " + this.port);
 
             this.sct.shutdownInput();
             this.sct.shutdownOutput();
@@ -105,6 +104,7 @@ public class TalkPort
             catch (IOException e)
             {
                 // there could be a error
+                this.robot.writeLog("Something went wrong while shutting down socket on port " + this.port);
             }
 
             if (this.thread != null)
@@ -114,11 +114,7 @@ public class TalkPort
                 {
                     if (LocalDateTime.now().toLocalTime().toSecondOfDay() - stTime > 1)
                     {
-                        if (Common.LOG_LEVEL < Common.LOG_EXC_WARN)
-                        {
-                            System.out.println(Common.ANSI_YELLOW + "Warning: Something went wrong. Rude disconnection on port " +
-                                    this.port + Common.ANSI_RESET);
-                        }
+                        this.robot.writeLog("Something went wrong. Rude disconnection on port " + this.port);
                         try
                         {
                             this.sct.close();
@@ -126,8 +122,8 @@ public class TalkPort
                         catch (IOException e)
                         {
                             // there could be a error
+                            this.robot.writeLog("Something went wrong while closing socket on port " + this.port);
                         }
-
                     }
                 }
             }

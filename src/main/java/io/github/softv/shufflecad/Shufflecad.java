@@ -1,33 +1,57 @@
 package io.github.softv.shufflecad;
 
-import io.github.softv.Common;
-import io.github.softv.internal.LoggerInside;
+import io.github.softv.internal.common.Robot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Shufflecad {
-    public static void start(){
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                Common.logger.writeMainLog("Program stopped");
-                Common.logger.writeMainLog("Signal handler called with signal (IDK it's Java)");
-                ConnectionHelper.stop();
-                // maybe exception should be thrown ?
-            }
-        });
-        ConnectionHelper.initAndStart();
+    private final ConnectionHelper connectionHelper;
+
+    public List<ShuffleVariable> variablesArray = new ArrayList<>();
+    public List<CameraVariable> cameraVariablesArray = new ArrayList<>();
+    public Map<String, Integer> joystickValues = new HashMap<String, Integer>();
+    public List<String> printArray = new ArrayList<>();
+
+    public Shufflecad(Robot robot) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            robot.writeLog("Program stopped");
+            robot.writeLog("Signal handler called with signal (IDK it's Java)");
+            this.stop();
+            // maybe exception should be thrown ?
+        }));
+        connectionHelper = new ConnectionHelper(this, robot);
     }
 
-    public static void stop(){
-        ConnectionHelper.stop();
+    public void stop(){
+        connectionHelper.stop();
     }
 
-    public static IVariable addVar(IVariable variable){
+    public IVariable addVar(IVariable variable){
         if (variable instanceof CameraVariable){
-            ShufflecadHolder.cameraVariablesArray.add((CameraVariable) variable);
+            cameraVariablesArray.add((CameraVariable) variable);
         }
         else{
-            ShufflecadHolder.variablesArray.add((ShuffleVariable) variable);
+            variablesArray.add((ShuffleVariable) variable);
         }
         return variable;
+    }
+
+    public void printToLog(String var, String color){
+        printArray.add(var + color);
+    }
+
+    public void printToLog(String var){
+        printToLog(var, "#cccccc");
+    }
+
+    public List<String> getPrintArray(){
+        return printArray;
+    }
+
+    public void clearPrintArray(){
+        printArray.clear();
     }
 }

@@ -1,6 +1,8 @@
 package io.github.softv.shufflecad;
 
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ShuffleVariable implements IVariable {
     public static final String FLOAT_TYPE = "float";
@@ -9,6 +11,7 @@ public class ShuffleVariable implements IVariable {
     public static final String BOOL_TYPE = "bool";
     public static final String CHART_TYPE = "chart";
     public static final String SLIDER_TYPE = "slider";
+    public static final String RADAR_TYPE = "radar";
 
     public static final String IN_VAR = "in";
     public static final String OUT_VAR = "out";
@@ -39,6 +42,15 @@ public class ShuffleVariable implements IVariable {
 
     public void setString(String val){
         this.value = val;
+    }
+
+    public void setRadar(ArrayList<Integer> val){
+        ArrayList<Integer> completeList = new ArrayList<Integer>();
+        for (int i = 0; i < val.size(); i++) {
+            completeList.add(i);
+            completeList.add(val.get(i));
+        }
+        this.value = String.join("+", completeList.stream().map(String::valueOf).collect(Collectors.toList()));
     }
 
     public boolean getBool(){
