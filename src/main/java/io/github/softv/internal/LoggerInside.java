@@ -18,6 +18,7 @@ public class LoggerInside {
             return;
         try {
             writer.append(s);
+            writer.append("\n");
         } catch (IOException ignored) { }
     }
 

@@ -10,18 +10,18 @@ import java.time.temporal.ChronoField;
 public class Main {
     public static void main(String[] args) throws InterruptedException, IOException {
 
-        // System.load("D:\\Programs\\opencv\\build\\java\\x64\\opencv_java440.dll");
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.load("C:\\opencv\\build\\java\\x64\\opencv_java440.dll");
+        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         RobotVmxTitan robot = new RobotVmxTitan(false);
         Shufflecad shufflecad = new Shufflecad(robot);
 
         CameraVariable cv = (CameraVariable)shufflecad.addVar(new CameraVariable("test"));
 
         long millis = LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY);
-        while (LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis < 20000)
+        while (LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis < 200000)
         {
             robot.setMotorSpeed0(20);
-            robot.setMotorSpeed1(-20);
+            robot.setMotorSpeed1(20);
             if (robot.getCameraImage() != null)
                 cv.setMat(robot.getCameraImage());
         }

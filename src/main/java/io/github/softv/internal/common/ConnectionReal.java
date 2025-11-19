@@ -1,7 +1,7 @@
 package io.github.softv.internal.common;
 
 import org.opencv.core.Mat;
-import org.opencv.highgui.VideoCapture;
+import org.opencv.videoio.VideoCapture;
 
 import java.util.ArrayList;
 

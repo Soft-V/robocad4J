@@ -142,6 +142,7 @@ public class TalkPort {
                 catch (Exception e){
 
                 }
+                // TODO: ?
 //                int stTime = LocalDateTime.now().toLocalTime().toSecondOfDay();
 //                while (this.thread.isAlive())
 //                {

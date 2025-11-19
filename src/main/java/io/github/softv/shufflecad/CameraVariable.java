@@ -1,7 +1,7 @@
 package io.github.softv.shufflecad;
 
-import org.opencv.highgui.Highgui;
 import org.opencv.core.*;
+import org.opencv.imgcodecs.Imgcodecs;
 
 public class CameraVariable implements IVariable {
     public String name;
@@ -16,7 +16,7 @@ public class CameraVariable implements IVariable {
 
     public byte[] getValue(){
         MatOfByte bytes = new MatOfByte();
-        Highgui.imencode(".jpg", this.value, bytes);
+        Imgcodecs.imencode(".jpg", this.value, bytes);
         return bytes.toArray();
     }
 
