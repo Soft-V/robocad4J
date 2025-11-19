@@ -1,4 +1,6 @@
-package io.github.softv.internal.common;
+package io.github.softv.internal.studica;
+
+import io.github.softv.internal.common.RobotConfiguration;
 
 public class DefaultStudicaConfiguration extends RobotConfiguration {
     public String titanPort = "/dev/ttyACM0";

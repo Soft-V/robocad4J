@@ -1,9 +1,8 @@
 package io.github.softv;
 
-import io.github.softv.internal.LoggerInside;
 import io.github.softv.internal.StudicaInternal;
 import io.github.softv.internal.common.*;
-import io.github.softv.shufflecad.Shufflecad;
+import io.github.softv.internal.studica.DefaultStudicaConfiguration;
 import org.opencv.core.Mat;
 
 import java.io.IOException;

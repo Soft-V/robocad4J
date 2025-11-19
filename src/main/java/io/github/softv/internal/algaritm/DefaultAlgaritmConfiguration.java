@@ -1,4 +1,6 @@
-package io.github.softv.internal.common;
+package io.github.softv.internal.algaritm;
+
+import io.github.softv.internal.common.RobotConfiguration;
 
 public class DefaultAlgaritmConfiguration extends RobotConfiguration {
     public String titanPort = "/dev/ttyACM0";

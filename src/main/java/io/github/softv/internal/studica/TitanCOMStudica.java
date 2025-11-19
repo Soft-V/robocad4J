@@ -4,7 +4,6 @@ import io.github.softv.internal.LowLevelFuncad;
 import io.github.softv.internal.StudicaInternal;
 import io.github.softv.internal.common.Robot;
 import io.github.softv.internal.common.ConnectionReal;
-import io.github.softv.internal.common.DefaultStudicaConfiguration;
 
 import java.util.Arrays;
 

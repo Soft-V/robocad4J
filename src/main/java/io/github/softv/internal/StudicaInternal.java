@@ -1,7 +1,7 @@
 package io.github.softv.internal;
 
 import io.github.softv.RobotVmxTitan;
-import io.github.softv.internal.common.DefaultStudicaConfiguration;
+import io.github.softv.internal.studica.DefaultStudicaConfiguration;
 import io.github.softv.internal.common.ConnectionBase;
 import io.github.softv.internal.common.ConnectionReal;
 import io.github.softv.internal.common.UpdaterRpi;
