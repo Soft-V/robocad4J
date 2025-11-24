@@ -97,7 +97,6 @@ public class AlgaritmInternal {
 
     public void stop() {
         this.connection.stop();
-        this.robot.closeLog();
         if (!robot.onRealRobot) {
             // TODO: sim conn
         }

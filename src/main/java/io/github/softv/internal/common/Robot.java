@@ -21,8 +21,4 @@ public abstract class Robot {
     public synchronized void writeLog(String s) {
         this.logger.log(s); // TODO: time
     }
-
-    public synchronized void closeLog() {
-        this.logger.close();
-    }
 }

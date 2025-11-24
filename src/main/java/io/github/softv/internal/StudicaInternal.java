@@ -91,7 +91,6 @@ public class StudicaInternal {
 
     public void stop() {
         this.connection.stop();
-        this.robot.closeLog();
         if (!robot.onRealRobot) {
             if (this.robocadConnection != null) {
                 this.robocadConnection.stop();
