@@ -1,26 +1,39 @@
 package io.github.softv.internal;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.builder.api.*;
+import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 public class LoggerInside {
-    private final String path;
+    protected final org.apache.logging.log4j.Logger logger;
 
     public LoggerInside(String path) {
-        this.path = path;
-        try {
-            File yourFile = new File(path);
-            boolean ignored = yourFile.createNewFile(); // if file already exists will do nothing
-        } catch (IOException ignored) { }
+        ConfigurationBuilder<BuiltConfiguration> builder
+                = ConfigurationBuilderFactory.newConfigurationBuilder();
+        AppenderComponentBuilder file
+                = builder.newAppender("log", "File");
+        file.addAttribute("fileName", path);
+        file.addAttribute("append", false);
+        LayoutComponentBuilder standard
+                = builder.newLayout("PatternLayout");
+        standard.addAttribute("pattern", "%d [%t] %-5level: %msg%n%throwable");
+        file.add(standard);
+        builder.add(file);
+
+        RootLoggerComponentBuilder rootLogger
+                = builder.newRootLogger(Level.ALL);
+        rootLogger.add(builder.newAppenderRef("log"));
+
+        builder.add(rootLogger);
+        LoggerContext c = Configurator.initialize(builder.build());
+
+        this.logger = c.getLogger("root");
     }
 
     public synchronized void log(String s) {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(this.path));
-            writer.append(s);
-            writer.append("\n");
-        } catch (IOException ignored) { }
+        this.logger.log(Level.INFO, s);
     }
 }
