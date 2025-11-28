@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Shufflecad {
+    public final String LOG_INFO = "info";
+    public final String LOG_WARNING = "warning";
+    public final String LOG_ERROR = "error";
+
     private final ConnectionHelper connectionHelper;
 
     public List<ShuffleVariable> variablesArray = new ArrayList<>();
@@ -39,12 +43,16 @@ public class Shufflecad {
         return variable;
     }
 
-    public void printToLog(String var, String color){
-        printArray.add(var + color);
+    public void printToLog(String var, String messageType, String color){
+        printArray.add(messageType + "@" + var + color);
+    }
+
+    public void printToLog(String var, String messageType){
+        printToLog(var, messageType, "#cccccc");
     }
 
     public void printToLog(String var){
-        printToLog(var, "#cccccc");
+        printToLog(var, LOG_INFO);
     }
 
     public List<String> getPrintArray(){
