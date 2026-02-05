@@ -32,7 +32,7 @@ public class ConnectionReal extends ConnectionBase {
         if (conf.withPiBlaster)
         {
             try {
-                Process piBlasterProcess = Runtime.getRuntime().exec("sudo /home/pi/pi-blaster/pi-blaster");
+                Process piBlasterProcess = Runtime.getRuntime().exec("sudo /home/pi/pi-blaster/pi-blaster --pcm");
             }
             catch (Exception e) {
                 this.robot.writeLog("Exception while running pi-blaster: ");
