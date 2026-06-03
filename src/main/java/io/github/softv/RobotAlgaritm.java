@@ -126,6 +126,14 @@ public class RobotAlgaritm extends Robot {
         return algaritmInternal.analog8;
     }
 
+    public boolean[] getOutputs() {
+        return algaritmInternal.outputs;
+    }
+
+    public boolean[] getInputs() {
+        return algaritmInternal.inputs;
+    }
+
     public void setAdditionalServo1(float angle) {
         algaritmInternal.additionalServo1 = angle;
     }

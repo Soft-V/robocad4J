@@ -72,6 +72,8 @@ public class AlgaritmInternal {
     public float analog6 = 0;
     public float analog7 = 0;
     public float analog8 = 0;
+    public boolean[] inputs = new boolean[] {false, false, false, false};
+    public boolean[] outputs = new boolean[] {false, false, false, false};
 
     public Float[] servoAngles = new Float[] {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
 

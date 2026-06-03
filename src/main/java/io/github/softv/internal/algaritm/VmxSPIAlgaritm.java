@@ -101,6 +101,11 @@ public class VmxSPIAlgaritm {
             this.robotInternal.ultrasound2 = us3U / 100.0f;
             int us4U = (data[10] & 0xff) << 8 | (data[9] & 0xff);
             this.robotInternal.ultrasound2 = us4U / 100.0f;
+
+            this.robotInternal.inputs[0] = LowLevelFuncad.accessBit(data[11], 0);
+            this.robotInternal.inputs[1] = LowLevelFuncad.accessBit(data[11], 1);
+            this.robotInternal.inputs[2] = LowLevelFuncad.accessBit(data[11], 2);
+            this.robotInternal.inputs[3] = LowLevelFuncad.accessBit(data[11], 3);
         }
         else if ((data[0] & 0xff) == 3){
             int yawU = (data[2] & 0xff) << 8 | (data[1] & 0xff);
@@ -118,7 +123,7 @@ public class VmxSPIAlgaritm {
             this.robotInternal.roll_unlim += calcAngleUnlim(roll, this.robotInternal.roll);
             this.robotInternal.roll = roll;
 
-            float power = ((data[8] & 0xff) << 8 | (data[7] & 0xff)) / 100.0f;
+            float power = ((data[9] & 0xff) << 8 | (data[8] & 0xff)) / 100.0f;
             this.robot.power = power;
         }
     }
@@ -136,6 +141,12 @@ public class VmxSPIAlgaritm {
             data[6] = (byte)(int)(float)robotInternal.servoAngles[5];
             data[7] = (byte)(int)(float)robotInternal.servoAngles[6];
             data[8] = (byte)(int)(float)robotInternal.servoAngles[7];
+
+            data[9] = (byte)Integer.parseInt("1" +
+                      (robotInternal.outputs[0] ? "1" : "0") +
+                      (robotInternal.outputs[1] ? "1" : "0") +
+                      (robotInternal.outputs[2] ? "1" : "0") +
+                      (robotInternal.outputs[3] ? "1" : "0") + "001", 2);
         }
         return data;
     }

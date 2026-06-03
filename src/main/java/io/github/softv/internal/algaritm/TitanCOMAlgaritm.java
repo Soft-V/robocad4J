@@ -85,14 +85,14 @@ public class TitanCOMAlgaritm {
             robotInternal.encMotor2 = ((data[12] & 0xff) << 24) | ((data[11] & 0xff) << 16) | ((data[10] & 0xff) << 8) | (data[9] & 0xff);
             robotInternal.encMotor3 = ((data[16] & 0xff) << 24) | ((data[15] & 0xff) << 16) | ((data[14] & 0xff) << 8) | (data[13] & 0xff);
 
-            robotInternal.limitL3 = LowLevelFuncad.accessBit(data[17], 0);
-            robotInternal.limitL0 = LowLevelFuncad.accessBit(data[17], 1);
-            robotInternal.limitH0 = LowLevelFuncad.accessBit(data[17], 2);
-            robotInternal.limitL1 = LowLevelFuncad.accessBit(data[17], 3);
-            robotInternal.limitH1 = LowLevelFuncad.accessBit(data[17], 4);
-            robotInternal.limitL2 = LowLevelFuncad.accessBit(data[17], 5);
-            robotInternal.limitH2 = LowLevelFuncad.accessBit(data[17], 6);
-            robotInternal.limitH3 = LowLevelFuncad.accessBit(data[17], 7);
+            robotInternal.limitL3 = LowLevelFuncad.accessBit(data[17], 7);
+            robotInternal.limitL0 = LowLevelFuncad.accessBit(data[17], 6);
+            robotInternal.limitH0 = LowLevelFuncad.accessBit(data[17], 5);
+            robotInternal.limitL1 = LowLevelFuncad.accessBit(data[17], 4);
+            robotInternal.limitH1 = LowLevelFuncad.accessBit(data[17], 3);
+            robotInternal.limitL2 = LowLevelFuncad.accessBit(data[17], 2);
+            robotInternal.limitH2 = LowLevelFuncad.accessBit(data[17], 1);
+            robotInternal.limitH3 = LowLevelFuncad.accessBit(data[17], 0);
 
             robotInternal.isStep1Busy = (data[18] != 0);
             robotInternal.isStep2Busy = (data[19] != 0);
