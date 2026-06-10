@@ -2,11 +2,10 @@ package io.github.softv.internal;
 
 import io.github.softv.RobotAlgaritm;
 import io.github.softv.internal.algaritm.DefaultAlgaritmConfiguration;
+import io.github.softv.internal.algaritm.RobocadConnectionAlgaritm;
 import io.github.softv.internal.algaritm.TitanCOMAlgaritm;
 import io.github.softv.internal.algaritm.VmxSPIAlgaritm;
 import io.github.softv.internal.common.*;
-import io.github.softv.internal.studica.TitanCOMStudica;
-import io.github.softv.internal.studica.VmxSPIStudica;
 import org.opencv.core.Mat;
 
 import java.util.ArrayList;
@@ -78,14 +77,16 @@ public class AlgaritmInternal {
     public Float[] servoAngles = new Float[] {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
 
     private final ConnectionBase connection;
+    private RobocadConnectionAlgaritm robocadConnection;
     private TitanCOMAlgaritm titanCom;
     private VmxSPIAlgaritm vmxSpi;
 
     public AlgaritmInternal(RobotAlgaritm robot, DefaultAlgaritmConfiguration conf) {
         this.robot = robot;
         if (!robot.onRealRobot) {
-            // TODO: sim conn
-            this.connection = null;
+            this.connection = new ConnectionSim(this.robot);
+            this.robocadConnection = new RobocadConnectionAlgaritm();
+            this.robocadConnection.start((ConnectionSim)this.connection, this.robot, this);
         }
         else {
             UpdaterRepka updater = new UpdaterRepka(this.robot);
@@ -100,7 +101,9 @@ public class AlgaritmInternal {
     public void stop() {
         this.connection.stop();
         if (!robot.onRealRobot) {
-            // TODO: sim conn
+            if (this.robocadConnection != null) {
+                this.robocadConnection.stop();
+            }
         }
         else {
             if (this.titanCom != null){
