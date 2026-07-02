@@ -11,7 +11,7 @@ public class DefaultAlgaritmConfiguration extends RobotConfiguration {
     public int vmxMode = 0;
 
     public DefaultAlgaritmConfiguration() {
-        cameraIndex = 2;
+        cameraIndex = 0;
         withPiBlaster = false;
     }
 }
