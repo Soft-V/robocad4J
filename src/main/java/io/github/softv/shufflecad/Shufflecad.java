@@ -48,7 +48,7 @@ public class Shufflecad {
     }
 
     public void printToLog(String var, String messageType){
-        printToLog(var, messageType, "#cccccc");
+        printToLog(var, messageType, "#808080");
     }
 
     public void printToLog(String var){
