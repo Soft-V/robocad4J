@@ -44,9 +44,23 @@ public class ConnectionSim extends ConnectionBase
         byte[] data = this.cameraChannel.outBytes;
         if (data.length == 921600)
         {
-            Mat newMat = new Mat(480, 640, CvType.CV_8UC3);
-            newMat.put(0, 0, data);
-            return newMat;
+            Mat img = new Mat(480, 640, CvType.CV_8UC3);
+            img.put(0, 0, data);
+
+            Mat imgBgr = new Mat();
+            Imgproc.cvtColor(img, imgBgr, Imgproc.COLOR_RGB2BGR);
+
+            Mat rotated = new Mat();
+            Core.rotate(imgBgr, rotated, Core.ROTATE_180);
+
+            Mat flipped = new Mat();
+            Core.flip(rotated, flipped, 1);
+
+            img.release();
+            imgBgr.release();
+            rotated.release();
+
+            return flipped;
         }
         return null;
     }
