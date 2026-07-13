@@ -47,13 +47,17 @@ public class ConnectionSim extends ConnectionBase
             Mat img = new Mat(480, 640, CvType.CV_8UC3);
             img.put(0, 0, data);
 
+            Mat imgBgr = new Mat();
+            Imgproc.cvtColor(img, imgBgr, Imgproc.COLOR_RGB2BGR);
+
             Mat rotated = new Mat();
-            Core.rotate(img, rotated, Core.ROTATE_180);
+            Core.rotate(imgBgr, rotated, Core.ROTATE_180);
 
             Mat flipped = new Mat();
             Core.flip(rotated, flipped, 1);
 
             img.release();
+            imgBgr.release();
             rotated.release();
 
             return flipped;
