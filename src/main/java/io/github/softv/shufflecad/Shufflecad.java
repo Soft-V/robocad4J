@@ -1,6 +1,7 @@
 package io.github.softv.shufflecad;
 
 import io.github.softv.internal.common.Robot;
+import io.github.softv.shufflecad.JoystickData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class Shufflecad {
     public List<ShuffleVariable> variablesArray = new ArrayList<>();
     public List<CameraVariable> cameraVariablesArray = new ArrayList<>();
     public Map<String, Integer> joystickValues = new HashMap<String, Integer>();
+    public JoystickData JoystickData = new JoystickData();
     public List<String> printArray = new ArrayList<>();
 
     public Shufflecad(Robot robot) {
