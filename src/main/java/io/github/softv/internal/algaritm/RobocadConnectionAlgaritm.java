@@ -56,7 +56,7 @@ public class RobocadConnectionAlgaritm {
         while (!stopUpdateThread) {
             List<Float> lst = new ArrayList<>(Arrays.asList(this.robotInternal.speedMotor0, this.robotInternal.speedMotor1,
                     this.robotInternal.speedMotor2, this.robotInternal.speedMotor3));
-            lst.addAll(Arrays.asList(this.robotInternal.servoAngles));
+            for (int i = 0; i <8; i++) lst.add(this.robotInternal.servoAngles[i] * 0.0011111f + 0.05f);
             lst.add(this.robotInternal.additionalServo1);
             lst.add(this.robotInternal.additionalServo2);
             lst.add((float)this.robotInternal.stepMotor1Steps);
