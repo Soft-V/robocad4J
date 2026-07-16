@@ -34,6 +34,11 @@ public class RobotAlgaritm extends Robot {
         algaritmInternal.stop();
     }
 
+    private int lastMotorEnc0 = 0;
+    private int lastMotorEnc1 = 0;
+    private int lastMotorEnc2 = 0;
+    private int lastMotorEnc3 = 0;
+
     public void setMotorSpeed0(float speed) {
         algaritmInternal.speedMotor0 = speed;
     }
@@ -50,21 +55,21 @@ public class RobotAlgaritm extends Robot {
         algaritmInternal.speedMotor3 = speed;
     }
 
-    public float getMotorEnc0() {
-        return algaritmInternal.encMotor0;
-    }
+    public float getMotorEnc0() { return algaritmInternal.encMotor0 - lastMotorEnc0; }
 
-    public float getMotorEnc1() {
-        return algaritmInternal.encMotor1;
-    }
+    public float getMotorEnc1() { return algaritmInternal.encMotor1 - lastMotorEnc1; }
 
-    public float getMotorEnc2() {
-        return algaritmInternal.encMotor2;
-    }
+    public float getMotorEnc2() { return algaritmInternal.encMotor2 - lastMotorEnc2; }
 
-    public float getMotorEnc3() {
-        return algaritmInternal.encMotor3;
-    }
+    public float getMotorEnc3() { return algaritmInternal.encMotor3 - lastMotorEnc3; }
+
+    public void resetMotorEnc0() { lastMotorEnc0 = algaritmInternal.encMotor0; }
+
+    public void resetMotorEnc1() { lastMotorEnc1 = algaritmInternal.encMotor1; }
+
+    public void resetMotorEnc2() { lastMotorEnc2 = algaritmInternal.encMotor2; }
+
+    public void resetMotorEnc3() { lastMotorEnc3 = algaritmInternal.encMotor3; }
 
     public float getYaw() {
         return algaritmInternal.yaw;
