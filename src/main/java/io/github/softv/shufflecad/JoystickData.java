@@ -14,10 +14,10 @@ public class JoystickData {
     public byte RightTrigger;
     public byte LeftTrigger;
 
-    public Integer LeftStickX;
-    public Integer LeftStickY;
-    public Integer RightStickX;
-    public Integer RightStickY;
+    public int LeftStickX;
+    public int LeftStickY;
+    public int RightStickX;
+    public int RightStickY;
 
     public boolean RightShoulder;
     public boolean LeftShoulder;

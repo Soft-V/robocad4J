@@ -115,74 +115,66 @@ public class ConnectionHelper {
         String data = joyVariablesChannel.outString;
         if (data == null || data.isEmpty() || data.equals("null")) return;
 
-        synchronized (this.shufflecad.dataLock) {
-            for (String item : data.split("&")) {
-                String[] parts = item.split(";");
-                if (parts.length != 2) continue;
+        for (String item : data.split("&")) {
+            String[] parts = item.split(";");
+            if (parts.length != 2) continue;
 
-                int val;
-                try {
-                    val = Integer.parseInt(parts[1]);
-                } catch (NumberFormatException e) {
-                    continue;
-                }
+            int val;
+            try {
+                val = Integer.parseInt(parts[1]);
+            } catch (NumberFormatException e) {
+                continue;
+            }
 
-                if (this.shufflecad.joystickValues.containsKey(parts[0])) {
-                    this.shufflecad.joystickValues.replace(parts[0], val);
-                } else {
-                    this.shufflecad.joystickValues.put(parts[0], val);
-                }
-
-                switch (parts[0]) {
-                    case "A":
-                        this.shufflecad.joystickData.BtnA = val == 1;
-                        break;
-                    case "X":
-                        this.shufflecad.joystickData.BtnX = val == 1;
-                        break;
-                    case "Y":
-                        this.shufflecad.joystickData.BtnY = val == 1;
-                        break;
-                    case "B":
-                        this.shufflecad.joystickData.BtnB = val == 1;
-                        break;
-                    case "RightShoulder":
-                        this.shufflecad.joystickData.RightShoulder = val == 1;
-                        break;
-                    case "LeftShoulder":
-                        this.shufflecad.joystickData.LeftShoulder = val == 1;
-                        break;
-                    case "DPad_Up":
-                        this.shufflecad.joystickData.DpudUp = val == 1;
-                        break;
-                    case "DPad_Down":
-                        this.shufflecad.joystickData.DpudDown = val == 1;
-                        break;
-                    case "DPad_Right":
-                        this.shufflecad.joystickData.DpudRight = val == 1;
-                        break;
-                    case "DPad_Left":
-                        this.shufflecad.joystickData.DpudLeft = val == 1;
-                        break;
-                    case "LeftTrigger":
-                        this.shufflecad.joystickData.LeftTrigger = (byte) val;
-                        break;
-                    case "RightTrigger":
-                        this.shufflecad.joystickData.RightTrigger = (byte) val;
-                        break;
-                    case "LeftThumbstick_X":
-                        this.shufflecad.joystickData.LeftStickX = val;
-                        break;
-                    case "LeftThumbstick_Y":
-                        this.shufflecad.joystickData.LeftStickY = val;
-                        break;
-                    case "RightThumbstick_X":
-                        this.shufflecad.joystickData.RightStickX = val;
-                        break;
-                    case "RightThumbstick_Y":
-                        this.shufflecad.joystickData.RightStickY = val;
-                        break;
-                }
+            switch (parts[0]) {
+                case "A":
+                    this.shufflecad.joystickData.BtnA = val == 1;
+                    break;
+                case "X":
+                    this.shufflecad.joystickData.BtnX = val == 1;
+                    break;
+                case "Y":
+                    this.shufflecad.joystickData.BtnY = val == 1;
+                    break;
+                case "B":
+                    this.shufflecad.joystickData.BtnB = val == 1;
+                    break;
+                case "RightShoulder":
+                    this.shufflecad.joystickData.RightShoulder = val == 1;
+                    break;
+                case "LeftShoulder":
+                    this.shufflecad.joystickData.LeftShoulder = val == 1;
+                    break;
+                case "DPad_Up":
+                    this.shufflecad.joystickData.DpudUp = val == 1;
+                    break;
+                case "DPad_Down":
+                    this.shufflecad.joystickData.DpudDown = val == 1;
+                    break;
+                case "DPad_Right":
+                    this.shufflecad.joystickData.DpudRight = val == 1;
+                    break;
+                case "DPad_Left":
+                    this.shufflecad.joystickData.DpudLeft = val == 1;
+                    break;
+                case "LeftTrigger":
+                    this.shufflecad.joystickData.LeftTrigger = (byte) val;
+                    break;
+                case "RightTrigger":
+                    this.shufflecad.joystickData.RightTrigger = (byte) val;
+                    break;
+                case "LeftThumbstick_X":
+                    this.shufflecad.joystickData.LeftStickX = val;
+                    break;
+                case "LeftThumbstick_Y":
+                    this.shufflecad.joystickData.LeftStickY = val;
+                    break;
+                case "RightThumbstick_X":
+                    this.shufflecad.joystickData.RightStickX = val;
+                    break;
+                case "RightThumbstick_Y":
+                    this.shufflecad.joystickData.RightStickY = val;
+                    break;
             }
         }
     };
