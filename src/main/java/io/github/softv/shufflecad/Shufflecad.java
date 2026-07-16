@@ -3,9 +3,7 @@ package io.github.softv.shufflecad;
 import io.github.softv.internal.common.Robot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Shufflecad {
     public final String LOG_INFO = "info";
@@ -16,7 +14,7 @@ public class Shufflecad {
 
     public List<ShuffleVariable> variablesArray = new ArrayList<>();
     public List<CameraVariable> cameraVariablesArray = new ArrayList<>();
-    public Map<String, Integer> joystickValues = new HashMap<String, Integer>();
+    public final JoystickData joystickData = new JoystickData();
     public List<String> printArray = new ArrayList<>();
 
     public Shufflecad(Robot robot) {
@@ -41,6 +39,10 @@ public class Shufflecad {
             variablesArray.add((ShuffleVariable) variable);
         }
         return variable;
+    }
+
+    public JoystickData getJoystickData(){
+        return joystickData;
     }
 
     public void printToLog(String var, String messageType, String color){

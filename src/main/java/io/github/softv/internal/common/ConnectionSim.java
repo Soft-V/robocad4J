@@ -1,7 +1,9 @@
 package io.github.softv.internal.common;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 
