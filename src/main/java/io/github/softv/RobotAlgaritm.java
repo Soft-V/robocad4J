@@ -35,25 +35,20 @@ public class RobotAlgaritm extends Robot {
     }
 
     private int lastMotorEnc0 = 0;
+
     private int lastMotorEnc1 = 0;
+
     private int lastMotorEnc2 = 0;
+
     private int lastMotorEnc3 = 0;
 
-    public void setMotorSpeed0(float speed) {
-        algaritmInternal.speedMotor0 = speed;
-    }
+    public void setMotorSpeed0(float speed) { algaritmInternal.speedMotor0 = speed; }
 
-    public void setMotorSpeed1(float speed) {
-        algaritmInternal.speedMotor1 = speed;
-    }
+    public void setMotorSpeed1(float speed) { algaritmInternal.speedMotor1 = speed; }
 
-    public void setMotorSpeed2(float speed) {
-        algaritmInternal.speedMotor2 = speed;
-    }
+    public void setMotorSpeed2(float speed) { algaritmInternal.speedMotor2 = speed; }
 
-    public void setMotorSpeed3(float speed) {
-        algaritmInternal.speedMotor3 = speed;
-    }
+    public void setMotorSpeed3(float speed) { algaritmInternal.speedMotor3 = speed; }
 
     public float getMotorEnc0() { return algaritmInternal.encMotor0 - lastMotorEnc0; }
 

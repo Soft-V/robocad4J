@@ -1,23 +1,18 @@
-package io.github.softv.algaritm;
+package io.github.softv.studica;
 
-import io.github.softv.RobotAlgaritm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.github.softv.RobotVmxTitan;
 import org.testng.Assert;
-import org.testng.IReporter;
-import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 
 public class TestRobotEnvironmentInteraction {
-    private static final Logger log = LoggerFactory.getLogger(TestRobotEnvironmentInteraction.class);
-    private RobotAlgaritm robot;
-    private IReporter ireporter;
+    private RobotVmxTitan robot;
+
     @BeforeClass
     public void setUp() throws IOException, InterruptedException {
-        robot = new RobotAlgaritm(false);
+        robot = new RobotVmxTitan(false);
 
         Thread.sleep(100);
     }
@@ -28,7 +23,7 @@ public class TestRobotEnvironmentInteraction {
      * @throws InterruptedException
      */
     @Test(groups = "auto", priority = 1)
-    public void testAxisSpeedDistribution() throws InterruptedException {
+    public void testMotorsSpeedDistribution() throws InterruptedException {
         setAxisSpeed(30,0,0);
         long startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < 2000) {  }
@@ -49,9 +44,8 @@ public class TestRobotEnvironmentInteraction {
      */
     @Test(groups = "auto", priority = 2)
     public void checkBaseEncodersValuesAfterRobotMoved() {
-        Reporter.log("checkBaseEncodersValuesAfterRobotMoved started", 2);
         long startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis() - startTime < 2000) {
+        while(System.currentTimeMillis() - startTime < 500) {
             System.out.printf("Encoder0: %f | Encoder1: %f | Encoder2: %f\n", robot.getMotorEnc0(), robot.getMotorEnc1(), robot.getMotorEnc2());
         }
         Assert.assertNotEquals(robot.getMotorEnc0(), 0.0f);
@@ -60,15 +54,13 @@ public class TestRobotEnvironmentInteraction {
     }
 
     @Test(groups = "auto", priority = 3)
-    public void checkIfEncodersResetWorks() {
+    public void checkIfBaseEncodersResetWorks() {
         robot.resetMotorEnc0();
         robot.resetMotorEnc1();
         robot.resetMotorEnc2();
-        robot.resetMotorEnc3();
         Assert.assertEquals(robot.getMotorEnc0(), 0.0f);
         Assert.assertEquals(robot.getMotorEnc1(), 0.0f);
         Assert.assertEquals(robot.getMotorEnc2(), 0.0f);
-        Assert.assertEquals(robot.getMotorEnc3(), 0.0f);
     }
 
     @Test(groups = "auto", priority = 4)
@@ -76,15 +68,15 @@ public class TestRobotEnvironmentInteraction {
         long startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < 500) { }
 
-        robot.setAngleServo(180, 1);
+        robot.setAngleHCDIO(300, 3);
         startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < 2500) { }
 
-        robot.setAngleServo(90, 1);
+        robot.setAngleHCDIO(150, 3);
         startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < 1500) { }
 
-        robot.setAngleServo(0, 1);
+        robot.setAngleHCDIO(0, 3);
         startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < 1500) { }
     }
@@ -94,15 +86,15 @@ public class TestRobotEnvironmentInteraction {
         long startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < 500) { }
 
-        robot.setAngleServo(180, 2);
+        robot.setAngleHCDIO(300, 4);
         startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < 2500) { }
 
-        robot.setAngleServo(90, 2);
+        robot.setAngleHCDIO(150, 4);
         startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < 1500) { }
 
-        robot.setAngleServo(0, 2);
+        robot.setAngleHCDIO(0, 4);
         startTime = System.currentTimeMillis();
         while(System.currentTimeMillis() - startTime < 1500) { }
     }
@@ -113,17 +105,16 @@ public class TestRobotEnvironmentInteraction {
         while(System.currentTimeMillis() - startTime < 500) { }
 
         startTime = System.currentTimeMillis();
-        robot.getOutputs()[0] = true; // Зеленый
-        robot.getOutputs()[1] = false;
+        robot.setBoolHCDIO(true, 1); // Зеленый
+        robot.setBoolHCDIO(false, 2);
         while(System.currentTimeMillis() - startTime < 500) { }
 
 
         startTime = System.currentTimeMillis();
-        robot.getOutputs()[1] = true; // Красный
-        robot.getOutputs()[0] = false;
+        robot.setBoolHCDIO(false, 1);
+        robot.setBoolHCDIO(true, 2); // Красный
         while(System.currentTimeMillis() - startTime < 1000) { }
     }
-
     /**
      * Проверка всех кнопок на виртуальной панели на работоспособность. Необходимо за 30 секунд хотя бы 1 раз прожать все 4 кнопки: EMS, Start, Reset и Stop на виртуальной панели для успешного завершения теста.
      * Параллельно желательно проверять, что нажатая в симуляторе и отображаемая в консоли кнопки правильно соотносятся, но и без этого тест пройдется.
@@ -135,18 +126,17 @@ public class TestRobotEnvironmentInteraction {
         boolean resetButtonPressedOnce = false;
         boolean stopButtonPressedOnce = false;
 
-        long startTime = System.currentTimeMillis();
         while(!emsPressedOnce || !startButtonPressedOnce || !resetButtonPressedOnce || !stopButtonPressedOnce) {
-            if(robot.getInputs()[0])
+            if(robot.getVmxFlex()[0])
                 emsPressedOnce = true;
 
-            if (robot.getInputs()[1])
+            if (robot.getVmxFlex()[1])
                 startButtonPressedOnce = true;
 
-            if(robot.getInputs()[2])
+            if(robot.getVmxFlex()[2])
                 resetButtonPressedOnce = true;
 
-            if(robot.getInputs()[3])
+            if(robot.getVmxFlex()[3])
                 stopButtonPressedOnce = true;
 
             System.out.printf("EMS: %b   |   Start: %b   |   Reset: %b   |   Stop: %b\n", emsPressedOnce, startButtonPressedOnce, resetButtonPressedOnce, stopButtonPressedOnce);
@@ -158,10 +148,7 @@ public class TestRobotEnvironmentInteraction {
         Assert.assertTrue(stopButtonPressedOnce);
     }
 
-
-
     /**
-     *
      * @param x скорость вперед и назад
      * @param y скорость вправо и влево
      * @param z скорость по часовой и против часовой
@@ -177,4 +164,5 @@ public class TestRobotEnvironmentInteraction {
         robot.setMotorSpeed2(back);
         Thread.sleep(20);
     }
+
 }

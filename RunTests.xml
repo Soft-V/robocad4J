@@ -2,7 +2,7 @@
 <suite name="robocadTestSuite" verbose="5">
     <test name="Robocad" preserve-order="true">
         <classes>
-            <class name="io.github.softv.algaritm.TestRobotOnStartup"/>
+            <class name="io.github.softv.algaritm.TestRobotAtStartup"/>
             <class name="io.github.softv.algaritm.TestRobotEnvironmentInteraction"/>
         </classes>
     </test>

@@ -10,20 +10,25 @@ import java.time.temporal.ChronoField;
 
 public class TestAlga {
     public static void test() throws IOException, InterruptedException {
-        System.load("C:\\opencv\\build\\java\\x64\\opencv_java440.dll");
-        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        RobotAlgaritm robot = new RobotAlgaritm(true);
+
+        RobotAlgaritm robot = new RobotAlgaritm(false);
         Shufflecad shufflecad = new Shufflecad(robot);
-
-        CameraVariable cv = (CameraVariable)shufflecad.addVar(new CameraVariable("test"));
-
+        Thread.sleep(1000);
         long millis = LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY);
-        while (LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis < 200000)
+        while (LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis < 3000)
         {
-            robot.setMotorSpeed0(20);
-            robot.setMotorSpeed1(20);
-            if (robot.getCameraImage() != null)
-                cv.setMat(robot.getCameraImage());
+            System.out.println(robot.getMotorEnc0() + " | " + robot.getMotorEnc1());
+            robot.setMotorSpeed0(-50);
+            robot.setMotorSpeed1(50);
+        }
+        robot.resetMotorEnc0();
+        robot.resetMotorEnc1();
+
+        millis = LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY);
+
+        while (LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis < 3000)
+        {
+            System.out.println(robot.getMotorEnc0() + " | " + robot.getMotorEnc1());
         }
         robot.setMotorSpeed0(0);
         robot.setMotorSpeed1(0);
