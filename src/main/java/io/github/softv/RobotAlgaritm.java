@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 public class RobotAlgaritm extends Robot {
     private final AlgaritmInternal algaritmInternal;
+    private float resetedYawVal = 0;
+    private float resetedPitchVal = 0;
+    private float resetedRollVal = 0;
 
     public RobotAlgaritm() throws IOException { this(true, null); }
     public RobotAlgaritm(boolean isRealRobot) throws IOException { this(isRealRobot, null); }
@@ -67,15 +70,27 @@ public class RobotAlgaritm extends Robot {
     }
 
     public float getYaw() {
-        return algaritmInternal.yaw;
+        return rerangeAngle360(algaritmInternal.yaw - resetedYawVal);
+    }
+
+    public void resetYaw() {
+        resetedYawVal = getYaw();
     }
 
     public float getPitch() {
-        return algaritmInternal.pitch;
+        return rerangeAngle360(algaritmInternal.pitch - resetedPitchVal);
+    }
+
+    public void resetPitch() {
+        resetedPitchVal = getPitch();
     }
 
     public float getRoll() {
-        return algaritmInternal.roll;
+        return rerangeAngle360(algaritmInternal.roll - resetedRollVal);
+    }
+
+    public void resetRoll() {
+        resetedRollVal = getRoll();
     }
 
     public float getUltrasound1() {
@@ -184,5 +199,13 @@ public class RobotAlgaritm extends Robot {
     */
     public void setAngleServo(float value, int port) {
         algaritmInternal.setServoAngle(value, port - 1);
+    }
+
+    private float rerangeAngle360(float angle) {
+        while (angle > 360)
+            angle -= 360;
+        while (angle < 0)
+            angle += 360;
+        return angle;
     }
 }

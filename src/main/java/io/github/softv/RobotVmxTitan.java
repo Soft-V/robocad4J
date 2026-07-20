@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class RobotVmxTitan extends Robot {
     private final StudicaInternal studicaInternal;
+    private float resetedYawVal = 0;
 
     public RobotVmxTitan() throws IOException { this(true, null); }
     public RobotVmxTitan(boolean isRealRobot) throws IOException { this(isRealRobot, null); }
@@ -66,7 +67,11 @@ public class RobotVmxTitan extends Robot {
     }
 
     public float getYaw() {
-        return studicaInternal.yaw;
+        return rerangeAngle180(studicaInternal.yaw - resetedYawVal);
+    }
+
+    public void resetYaw() {
+        resetedYawVal = getYaw();
     }
 
     public float getUltrasound1() {
@@ -122,5 +127,13 @@ public class RobotVmxTitan extends Robot {
 
     public void setBoolHCDIO(boolean value, int port) {
         studicaInternal.setLedState(value, port - 1);
+    }
+
+    private float rerangeAngle180(float angle) {
+        while (angle > 180)
+            angle -= 360;
+        while (angle < -180)
+            angle += 360;
+        return angle;
     }
 }

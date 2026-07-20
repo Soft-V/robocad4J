@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class CommonRobot extends Robot {
     private final CommonInternal commonInternal;
+    private float resetedYawVal = 0;
 
     public CommonRobot() throws IOException { this(false, null); }
     public CommonRobot(boolean isRealRobot) throws IOException { this(isRealRobot, null); }
@@ -48,7 +49,13 @@ public class CommonRobot extends Robot {
     public int getMotorEnc6() { return commonInternal.encMotor6; }
     public int getMotorEnc7() { return commonInternal.encMotor7; }
 
-    public float getYaw() { return commonInternal.yaw; }
+    public float getYaw() {
+        return rerangeAngle180(commonInternal.yaw - resetedYawVal);
+    }
+
+    public void resetYaw() {
+        resetedYawVal = getYaw();
+    }
 
     public float getUltrasound1() { return commonInternal.ultrasound1; }
     public float getUltrasound2() { return commonInternal.ultrasound2; }
@@ -91,5 +98,13 @@ public class CommonRobot extends Robot {
 
     public void setPwmServo(float value, int port) {
         commonInternal.setServoPwm(value, port - 1);
+    }
+
+    private float rerangeAngle180(float angle) {
+        while (angle > 180)
+            angle -= 360;
+        while (angle < -180)
+            angle += 360;
+        return angle;
     }
 }
