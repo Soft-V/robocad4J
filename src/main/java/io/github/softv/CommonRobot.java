@@ -31,6 +31,15 @@ public class CommonRobot extends Robot {
         writeLog("Program stopped");
     }
 
+    private int lastMotorEnc0 = 0;
+    private int lastMotorEnc1 = 0;
+    private int lastMotorEnc2 = 0;
+    private int lastMotorEnc3 = 0;
+    private int lastMotorEnc4 = 0;
+    private int lastMotorEnc5 = 0;
+    private int lastMotorEnc6 = 0;
+    private int lastMotorEnc7 = 0;
+
     public void setMotorSpeed0(float speed) { commonInternal.speedMotor0 = speed; }
     public void setMotorSpeed1(float speed) { commonInternal.speedMotor1 = speed; }
     public void setMotorSpeed2(float speed) { commonInternal.speedMotor2 = speed; }
@@ -40,14 +49,23 @@ public class CommonRobot extends Robot {
     public void setMotorSpeed6(float speed) { commonInternal.speedMotor6 = speed; }
     public void setMotorSpeed7(float speed) { commonInternal.speedMotor7 = speed; }
 
-    public int getMotorEnc0() { return commonInternal.encMotor0; }
-    public int getMotorEnc1() { return commonInternal.encMotor1; }
-    public int getMotorEnc2() { return commonInternal.encMotor2; }
-    public int getMotorEnc3() { return commonInternal.encMotor3; }
-    public int getMotorEnc4() { return commonInternal.encMotor4; }
-    public int getMotorEnc5() { return commonInternal.encMotor5; }
-    public int getMotorEnc6() { return commonInternal.encMotor6; }
-    public int getMotorEnc7() { return commonInternal.encMotor7; }
+    public int getMotorEnc0() { return commonInternal.encMotor0 - lastMotorEnc0; }
+    public int getMotorEnc1() { return commonInternal.encMotor1 - lastMotorEnc1; }
+    public int getMotorEnc2() { return commonInternal.encMotor2 - lastMotorEnc2; }
+    public int getMotorEnc3() { return commonInternal.encMotor3 - lastMotorEnc3; }
+    public int getMotorEnc4() { return commonInternal.encMotor4 - lastMotorEnc4; }
+    public int getMotorEnc5() { return commonInternal.encMotor5 - lastMotorEnc5; }
+    public int getMotorEnc6() { return commonInternal.encMotor6 - lastMotorEnc6; }
+    public int getMotorEnc7() { return commonInternal.encMotor7 - lastMotorEnc7; }
+
+    public void resetMotorEnc0() { lastMotorEnc0 = commonInternal.encMotor0; }
+    public void resetMotorEnc1() { lastMotorEnc1 = commonInternal.encMotor1; }
+    public void resetMotorEnc2() { lastMotorEnc2 = commonInternal.encMotor2; }
+    public void resetMotorEnc3() { lastMotorEnc3 = commonInternal.encMotor3; }
+    public void resetMotorEnc4() { lastMotorEnc4 = commonInternal.encMotor4; }
+    public void resetMotorEnc5() { lastMotorEnc5 = commonInternal.encMotor5; }
+    public void resetMotorEnc6() { lastMotorEnc6 = commonInternal.encMotor6; }
+    public void resetMotorEnc7() { lastMotorEnc7 = commonInternal.encMotor7; }
 
     public float getYaw() {
         return rerangeAngle180(commonInternal.yaw - resetedYawVal);

@@ -1,5 +1,7 @@
+import io.github.softv.RobotAlgaritm;
 import io.github.softv.RobotVmxTitan;
 import io.github.softv.shufflecad.CameraVariable;
+import io.github.softv.shufflecad.JoystickData;
 import io.github.softv.shufflecad.Shufflecad;
 
 import java.io.IOException;
@@ -8,25 +10,20 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoField;
 
 public class Test {
-    public static void test() throws IOException, InterruptedException {
-        System.load("C:\\opencv\\build\\java\\x64\\opencv_java440.dll");
-        //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        RobotVmxTitan robot = new RobotVmxTitan(false);
+    public static void main(String[] args) throws IOException, InterruptedException {
+        RobotAlgaritm robot = new RobotAlgaritm(false);
         Shufflecad shufflecad = new Shufflecad(robot);
 
-        CameraVariable cv = (CameraVariable)shufflecad.addVar(new CameraVariable("test"));
+        Thread.sleep(500);
+//        robot.setAngleServo(180, 1);
 
-        long millis = LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY);
-        while (LocalTime.now(ZoneOffset.UTC).get(ChronoField.MILLI_OF_DAY) - millis < 200000)
-        {
-            robot.setMotorSpeed0(20);
-            robot.setMotorSpeed1(20);
-            if (robot.getCameraImage() != null)
-                cv.setMat(robot.getCameraImage());
+        while(true) {
+            if(shufflecad.joystickData.BtnA) {
+                System.out.println("1111");
+                robot.setAngleServo(100, 1);
+            }
+            Thread.sleep(20);
         }
-        robot.setMotorSpeed0(0);
-        robot.setMotorSpeed1(0);
-        Thread.sleep(1000);
-        robot.stop();
+
     }
 }
