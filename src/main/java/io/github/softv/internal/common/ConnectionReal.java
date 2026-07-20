@@ -11,6 +11,7 @@ public class ConnectionReal extends ConnectionBase {
     private final JavaWrapper lib;
 
     private VideoCapture cameraInstance = null;
+    private LidarBase lidarInstance = null;
 
     private Thread robotInfoThread = null;
 
@@ -27,7 +28,19 @@ public class ConnectionReal extends ConnectionBase {
             this.robot.writeLog(e.getMessage());
         }
 
-        // TODO: lidar instance
+        try {
+            if (conf.lidarType == LidarTypes.YD_LIDAR_X2) {
+                this.robot.writeLog("YDLidarX2 is not implemented in robocad4J, lidar is disabled");
+            }
+            else {
+                this.lidarInstance = new N10Lidar(this.robot, conf.lidarPort);
+                this.lidarInstance.start();
+            }
+        }
+        catch (Exception e) {
+            this.robot.writeLog("Exception while creating lidar instance: ");
+            this.robot.writeLog(e.getMessage());
+        }
 
         if (conf.withPiBlaster)
         {
@@ -47,7 +60,9 @@ public class ConnectionReal extends ConnectionBase {
 
     @Override
     public void stop() {
-        // TODO: stop lidar
+        if (this.lidarInstance != null) {
+            this.lidarInstance.stop();
+        }
         this.updater.stopRobotInfoThread = true;
         try {
             this.robotInfoThread.join();
@@ -65,7 +80,10 @@ public class ConnectionReal extends ConnectionBase {
 
     @Override
     public ArrayList<Integer> getLidar() {
-        // TODO: return normal value
+        try {
+            if (this.lidarInstance != null) return this.lidarInstance.getData();
+        }
+        catch (Exception ignored) { }
         return null;
     }
 
