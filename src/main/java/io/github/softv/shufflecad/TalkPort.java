@@ -19,6 +19,9 @@ public class TalkPort {
     public byte[] outBytes = "null".getBytes(StandardCharsets.UTF_8);
     public String strFromClient = "-1";
 
+    // IP клиента (shufflecad) — нужен, чтобы слать кадры камеры по UDP.
+    public volatile String clientAddress = null;
+
     private ServerSocket sct;
     private Thread thread;
 
@@ -72,6 +75,7 @@ public class TalkPort {
         try
         {
             Socket clientSocket = this.sct.accept();
+            this.clientAddress = clientSocket.getInetAddress().getHostAddress();
             DataInputStream in = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
 
