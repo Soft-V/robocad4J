@@ -96,6 +96,11 @@ public class TitanCOMAlgaritm {
 
             robotInternal.isStep1Busy = (data[18] != 0);
             robotInternal.isStep2Busy = (data[19] != 0);
+
+            // reset step motor data when is_busy flag is True
+            // because we need to do step things only once
+            if (robotInternal.isStep1Busy) robotInternal.stepMotorReset(1);
+            if (robotInternal.isStep2Busy) robotInternal.stepMotorReset(2);
         }
     }
 

@@ -33,8 +33,8 @@ public class AlgaritmInternal {
     public boolean limitL3 = false;
     public boolean limitH3 = false;
 
-    public float additionalServo1 = 0;
-    public float additionalServo2 = 0;
+    public float additionalServo1 = 255f;
+    public float additionalServo2 = 255f;
 
     public boolean isStep1Busy = false;
     public boolean isStep2Busy = false;
@@ -74,7 +74,7 @@ public class AlgaritmInternal {
     public boolean[] inputs = new boolean[] {false, false, false, false};
     public boolean[] outputs = new boolean[] {false, false, false, false};
 
-    public Float[] servoAngles = new Float[] {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
+    public Float[] servoAngles = new Float[] {255f, 255f, 255f, 255f, 255f, 255f, 255f, 255f};
 
     private final ConnectionBase connection;
     private RobocadConnectionAlgaritm robocadConnection;
@@ -137,6 +137,19 @@ public class AlgaritmInternal {
             this.stepMotor2Steps = steps;
             this.stepMotor2StepsPerS = stepsPerS;
             this.stepMotor2Direction = direction;
+        }
+    }
+
+    public void stepMotorReset(int num){
+        if (num == 1) {
+            this.stepMotor1Steps = 0;
+            this.stepMotor1StepsPerS = 0;
+            this.stepMotor1Direction = false;
+        }
+        else if (num == 2) {
+            this.stepMotor2Steps = 0;
+            this.stepMotor2StepsPerS = 0;
+            this.stepMotor2Direction = false;
         }
     }
 }
