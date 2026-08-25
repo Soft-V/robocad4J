@@ -4,7 +4,7 @@
 
     <groupId>io.github.soft-v</groupId>
     <artifactId>robocad4J</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.3</version>
 
     <build>
         <plugins>
@@ -33,10 +33,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>21</source>
+                    <target>21</target>
                     <fork>true</fork>
-                    <executable>C:\Program Files\Java\jdk-1.8\bin\javac.exe</executable>
+                    <executable>C:\Program Files\Java\jdk-21\bin\javac.exe</executable>
                 </configuration>
             </plugin>
             <plugin>
@@ -57,7 +57,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
                 <configuration>
-                    <source>1.8</source>
+                    <source>21</source>
                 </configuration>
                 <executions>
                     <execution>
