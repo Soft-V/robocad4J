@@ -4,7 +4,7 @@
 
     <groupId>io.github.soft-v</groupId>
     <artifactId>robocad4J</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
 
     <build>
         <plugins>
