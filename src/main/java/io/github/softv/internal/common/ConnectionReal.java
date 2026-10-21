@@ -42,17 +42,6 @@ public class ConnectionReal extends ConnectionBase {
             this.robot.writeLog(e.getMessage());
         }
 
-        if (conf.withPiBlaster)
-        {
-            try {
-                Process piBlasterProcess = Runtime.getRuntime().exec("sudo /home/pi/pi-blaster/pi-blaster --pcm");
-            }
-            catch (Exception e) {
-                this.robot.writeLog("Exception while running pi-blaster: ");
-                this.robot.writeLog(e.getMessage());
-            }
-        }
-
         this.robotInfoThread = new Thread(this.updater::update);
         this.robotInfoThread.setDaemon(true);
         this.robotInfoThread.start();
@@ -63,6 +52,7 @@ public class ConnectionReal extends ConnectionBase {
         if (this.lidarInstance != null) {
             this.lidarInstance.stop();
         }
+        if (this.cameraInstance != null) this.cameraInstance.release();
         this.updater.stopRobotInfoThread = true;
         try {
             this.robotInfoThread.join();

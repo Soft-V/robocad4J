@@ -12,6 +12,5 @@ public class DefaultAlgaritmConfiguration extends RobotConfiguration {
 
     public DefaultAlgaritmConfiguration() {
         cameraIndex = 0;
-        withPiBlaster = false;
     }
 }

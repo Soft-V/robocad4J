@@ -30,6 +30,7 @@ public class RobotVmxTitan extends Robot {
         }));
     }
 
+    /** Drives all HCDIO signals LOW; torque release depends on the servo electronics. */
     public void stop() throws InterruptedException {
         studicaInternal.stop();
     }

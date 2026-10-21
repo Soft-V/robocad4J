@@ -35,8 +35,6 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <fork>true</fork>
-                    <executable>C:\Program Files\Java\jdk-21\bin\javac.exe</executable>
                 </configuration>
             </plugin>
             <plugin>
@@ -127,6 +125,12 @@
     </scm>
 
     <dependencies>
+        <!-- Explicit dependency: used by the FIFO client as well as OSHI. -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.18.1</version>
+        </dependency>
         <dependency>
             <groupId>org.openpnp</groupId>
             <artifactId>opencv</artifactId>
